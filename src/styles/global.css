@@ -242,7 +242,7 @@ body {
   --card: oklch(0.22 0.03 65);
   --card-foreground: oklch(0.88 0.04 85);
   
-  --popover: oklch(0.22 0.03 65);
+  --popover: oklch(19.648% 0.00253 67.483);
   --popover-foreground: oklch(0.88 0.04 85);
   
   --primary: oklch(0.52 0.10 170); /* verde oscuro */
