@@ -1,0 +1,22 @@
+---
+import BungalowCard from '@/components/BungalowCard.astro'
+import bungalow1 from '../assets/bungalow1.png'
+import bungalow2 from '../assets/bungalow2.png'
+import bungalow3 from '../assets/bungalow3.png'
+---
+
+
+
+<section class="pt-28">
+    <div class="container ">
+        <div class="mc-auto text-center ">
+            <h2 class="mb-1 text-500 font-600 md:text-600">Échale un Vistazo a Nuestros Bungalows</h2>
+        </div>
+
+        <div class="md:grid md:gap-9 md:grid-cols-2 lg:grid-cols-3">
+            <BungalowCard name="Suites" image={bungalow2} url="/suites" />
+            <BungalowCard name="Standard" image={bungalow3} url="/standard" />
+            <BungalowCard name="Todos" image={bungalow1} url="/all" />
+        </div>
+    </div>
+</section>

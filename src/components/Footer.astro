@@ -1,0 +1,54 @@
+---
+import { Button } from "./ui/button.tsx"
+---
+
+
+<footer class="bg-secondary relative mt-28 pt-20 pb-8 text-background dark:text-foreground">
+    <div class="container">
+        <div class="md:grid md:grid-cols-2 md:gap-4 lg:mb-8 lg:grid-cols-3">
+
+            <!-- Col. 1: Description -->
+            <div class="mb-8 md:mb-0">
+                <h3 class="uppercase text-300 font-500 mb-2">Las Aldas</h3>
+
+                <p class="mb-6">El Hotel Las Aldas se alza frente al mar Casmeño como un refugio de calma. 
+                    Un espacio para quienes valoran el descanso, la contemplación y la belleza del litoral peruano.
+                </p>
+
+                <a href="/" class="hover:text-primary transition-colors duration-300 ease-in-out">
+                    <Button className="uppercase font-600">Reservar</Button>
+                </a>
+            </div>
+
+            <!-- Col. 2: Quick Menu -->
+            <div class="mb-8 md:mb-0 md:justify-self-end lg:translate-x-[3rem]">
+                <h3 class="uppercase text-300 font-500 mb-2">Menú</h3>
+                <li class="mb-2 list-none">
+                    <a href="/rooms" class="hover:text-primary transitions-colors duration-300 ease">Bungalows</a>
+                <li class="mb-2 list-none">
+                    <a href="/experiences" class="hover:text-primary transitions-colors duration-300 ease">Experiencias</a>
+                <li class="list-none">
+                    <a href="/rooms" class="hover:text-primary transitions-colors duration-300 ease">Contacto</a>
+
+                </li>
+            </div>
+
+            <!-- Col. 3: Other Links -->
+            <div class="mb-8 md:mb-0 lg:justify-self-center lg:translate-x-[3rem]">
+                <h3 class="uppercase text-300 font-500 mb-2">Más Enlaces</h3>
+                <li class="mb-2 list-none">
+                    <a href="/gallery" class="hover:text-primary transitions-colors duration-300 ease">Galería</a>
+                <li class="mb-2 list-none">
+                    <a href="/policies" class="hover:text-primary transitions-colors duration-300 ease">Políticas</a>
+                <li class="list-none">
+                    <a href="/about" class="hover:text-primary transitions-colors duration-300 ease">Sobre Nosotros</a>
+
+                </li>
+            </div>
+        </div>
+
+        <div class="pt-12 text-center">
+            <p>© {new Date().getFullYear() } Hotel Las Aldas E.I.R.L. Todos los derechos reservados</p>
+        </div>
+    </div>
+</footer>

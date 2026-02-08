@@ -1,0 +1,28 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { rooms } from "../lib/constants";
+import Image from "astro/components/Image.astro";
+import LuxuryImg from "../assets/luxury.webp"
+import RoomListing from '@/components/RoomListing'
+
+const filteredRooms =
+    rooms.filter((room) => room.category === 'standard') || [];
+---
+
+<Layout title="Bungalows Standard">
+    <div class="relative z-40 ">
+        <div class="container flex items-start justify-center flex-col h-[20]">
+            <div class="z-40 max-w-175 mx-auto">
+                <h2 class="mt-8 text-600 font-700 leading-[1.2] md:text-800">Standard Bungalows</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pt-28">
+        <div class="md:grid md:gap-9 md:grid-cols-2 lg:grid-cols-3">
+            {filteredRooms.map(room => (
+                <RoomListing room={room} client:load />
+            ))}
+        </div>
+    </div>
+</Layout>

@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import Logo from "@/assets/logo.png";
+---
+
+<section class="section1" data-parallax>
+  <div class="hero-bg"></div>
+  <div class="sand-overlay"></div>
+  <div class="logo mx-auto max-w-[80%] md:max-w-[40%]">
+    <Image src={Logo} alt="Logo Image"/>
+  </div>
+</section>
+
+<script>
+  const section = document.querySelector('[data-parallax]') as HTMLElement | null;
+  const heroBg = document.querySelector('.hero-bg') as HTMLElement | null;
+  const logo = document.querySelector('.logo') as HTMLElement | null;
+
+  let ticking = false;
+
+  function updateParallax() {
+    const scrolled = window.pageYOffset;
+    const sectionRect = section?.getBoundingClientRect();
+
+    // Solo aplicar parallax mientras la sección esté visible
+    if (sectionRect && sectionRect.top < window.innerHeight && sectionRect.bottom > 0) {
+      // Background se mueve lento (30% de la velocidad)
+      if (heroBg) {
+        heroBg.style.transform = `translateY(${scrolled * 0.3}px)`;
+      }
+
+      // Logo se mueve más rápido (50% de la velocidad)
+      if (logo) {
+        logo.style.transform = `translateY(${scrolled * 0.5}px)`;
+      }
+    }
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  });
+</script>
+
+  <!-- <div class="relative z-40">
+    <div class="container flex h-screen flex-col items-start justify-center">
+      <div class="z-40 mx-auto max-w-[80%] md:max-w-[40%] text-center">
+        <Image src={Logo} alt="Logo Image"/>
+      </div>
+    </div>
+  </div> -->
