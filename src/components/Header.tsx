@@ -31,7 +31,7 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
     const getHeaderClasses = () => {
         if (isHomePage) {
             // Home page: fixed, con efecto de scroll
-            return `fixed top-0 z-[9999] w-full ${scrolling ? "bg-background text-foreground animate-in duration-500" : "text-black animate-out duration-500"}`;
+            return `fixed top-0 z-[9999] w-full ${scrolling ? "bg-background text-foreground animate-in duration-500" : "text-foreground dark:text-background animate-out duration-500"}`;
         } else {
             // Otras páginas: sticky, siempre con fondo
             return "sticky top-0 z-[9999] w-full bg-background text-foreground";

@@ -36,10 +36,10 @@ if(slug === undefined){
         <div class="flex flex-wrap items-center justify-center gap-4">
           {room.features.map(feature=> (
             <div class="flex items-center justify-center gap-2">
-              {feature.icon === 'door-closed'&& <DoorClosed className="text-primary" />}
-              {feature.icon === 'bed-double'&& <BedDouble className="text-primary" />}
-              {feature.icon === 'bed-single'&& <BedSingle className="text-primary" />}
-              {feature.icon === 'camera'&& <Camera  className="text-primary" />}
+              {feature.icon === 'door-closed'&& <DoorClosed className="text-foreground" />}
+              {feature.icon === 'bed-double'&& <BedDouble className="text-foreground" />}
+              {feature.icon === 'bed-single'&& <BedSingle className="text-foreground" />}
+              {feature.icon === 'camera'&& <Camera  className="text-foreground" />}
 
               <p> {feature.name}: <string>{feature.value}</string></p>
             </div>
@@ -49,19 +49,19 @@ if(slug === undefined){
 
       <div>
         <div>
-          <Image id="mainImage" class="h-125 rounded-lg object-cover w-full" src={room?.image_interior} alt={room?.name}/>
+          <Image id="mainImage" class="h-125 object-cover w-full" src={room?.image_interior} alt={room?.name}/>
         </div>
 
         {room?.thumbnails && room.thumbnails.length > 0 && (
           // Thumbnails de imagenes del bungalow
-          <div class="mt-4 flex items-center justify-center gap-4 overflow-x-auto pb-2">
-            <div class="thumbnail-item border-primary size-20 cursor-pointer overflow-hidden rounded-xl border-2 hover:border-primary" data-index="main">
-              <Image class="h-full w-full rounded-lg object-cover" src={room.image_interior} alt={`${room.name} - main`}/>
+          <div class="mt-4 flex items-center justify-center gap-0.5 overflow-x-auto pb-2">
+            <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="main">
+              <Image class="h-full w-full object-cover" src={room.image_interior} alt={`${room.name} - main`}/>
             </div>
 
             {room?.thumbnails.map((thumbnail, index) => (
-              <div class="thumbnail-item size-20 cursor-pointer overflow-hidden rounded-xl border-2 hover:border-primary" data-index={index}>
-                <Image class="h-full w-full rounded-lg object-cover" src={thumbnail} alt={`${room.name} - thumbnail ${index + 1}`}/>
+              <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index={index}>
+                <Image class="h-full w-full object-cover" src={thumbnail} alt={`${room.name} - thumbnail ${index + 1}`}/>
               </div>
             ))}
           </div>
@@ -80,11 +80,11 @@ if(slug === undefined){
             <div class="mb-8 grid grid-cols-2 gap-4">
               {room?.amenities.map(amenity => (
                 <div class="flex items-center gap-4">
-                  {amenity.icon === 'cooking-pot'&& <MdOutlineCountertops className="w-6 h-6 text-primary" />}
-                  {amenity.icon === 'solar-panel'&& <SolarPanel className="text-primary" />}
-                  {amenity.icon === 'sofa'&& <Sofa className="text-primary" />}
-                  {amenity.icon === 'utensils'&& <Utensils className="text-primary" />}
-                  {amenity.icon === 'beef'&& <TbGrill className="w-6 h-6 text-primary" />}
+                  {amenity.icon === 'cooking-pot'&& <MdOutlineCountertops className="w-6 h-6 text-foreground" />}
+                  {amenity.icon === 'solar-panel'&& <SolarPanel className="text-foreground" />}
+                  {amenity.icon === 'sofa'&& <Sofa className="text-foreground" />}
+                  {amenity.icon === 'utensils'&& <Utensils className="text-foreground" />}
+                  {amenity.icon === 'beef'&& <TbGrill className="w-6 h-6 text-foreground" />}
 
                   <p>{amenity.name}</p>
                 </div>
@@ -116,9 +116,9 @@ if(slug === undefined){
 
       thumbnails.forEach((thumbnail) => {
         thumbnail.addEventListener('click', () => {
-          thumbnails.forEach((t) => t.classList.remove('border-primary'));
+          thumbnails.forEach((t) => t.classList.remove('border-foreground'));
 
-          thumbnail.classList.add('border-primary');
+          thumbnail.classList.add('border-foreground');
 
           const index = thumbnail.getAttribute('data-index');
 
