@@ -1,4 +1,3 @@
-import ExecutiveImage from '../assets/bungalow1.png'
 import DeluxeImage from '../assets/bungalow3.png'
 import LuxuryImage from '../assets/bungalow2.png'
 

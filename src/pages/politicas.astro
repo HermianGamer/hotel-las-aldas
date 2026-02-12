@@ -1,0 +1,126 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+
+import matrimonio from '../../assets/matrimonio.jpg'
+---
+
+<Layout title="Actividades Cercanas">
+    <div class="container pt-15">
+        <div class="mb-8 text-center">
+            <h1 class="text-400 font-600 mb-4">Po</h1>
+            <p class="text-muted-foreground">Descubre todo lo que puedes hacer cerca de nuestro hotel</p>
+        </div>
+
+        <div class="mb-12">
+            <div>
+                <Image 
+                    id="mainImage"
+                    class="h-125 object-cover w-full" 
+                    src= {matrimonio}
+                    alt="Actividad principal"
+                />
+            </div>
+            
+            <div class="mt-4 flex items-center justify-center gap-0.5 overflow-x-auto pb-2">
+                <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="main">
+                    <Image 
+                        class="h-full w-full object-cover" 
+                        src= {matrimonio}
+                        alt="Actividad principal"
+                    />
+                </div>
+                <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="0">
+                    <Image 
+                        class="h-full w-full object-cover" 
+                        src= {matrimonio}
+                        alt="Actividad 1"
+                    />
+                </div>
+                <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="1">
+                    <Image 
+                        class="h-full w-full object-cover" 
+                        src= {matrimonio}
+                        alt="Actividad 2"
+                    />
+                </div>
+                <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="2">
+                    <Image 
+                        class="h-full w-full object-cover" 
+                        src= {matrimonio}
+                        alt="Actividad 3"
+                    />
+                </div>
+                <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="3">
+                    <Image 
+                        class="h-full w-full object-cover" 
+                        src= {matrimonio}
+                        alt="Actividad 4"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-16 max-w-4xl mx-auto">
+            <div class="mb-8">
+                <h3 class="text-300 font-600 mb-4">Explora la Zona</h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute 
+                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-300 font-600 mb-4">Actividades Populares</h3>
+                <p>
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                    mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit 
+                    voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab 
+                    illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                </p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-300 font-600 mb-4">Recomendaciones Locales</h3>
+                <p>
+                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia 
+                    consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro 
+                    quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, 
+                    sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat.
+                </p>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mainImage = document.getElementById('mainImage');
+    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    
+    if (mainImage && thumbnails.length > 0) {
+      const originalMainSrc = mainImage.getAttribute('src') || '';
+      
+      thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener('click', () => {
+          thumbnails.forEach((t) => t.classList.remove('border-foreground'));
+          thumbnail.classList.add('border-foreground');
+          
+          const index = thumbnail.getAttribute('data-index');
+          if (index === 'main') {
+            mainImage.setAttribute('src', originalMainSrc);
+          } else {
+            const thumbnailImg = thumbnail.querySelector('img');
+            if (thumbnailImg) {
+              const thumbnailSrc = thumbnailImg.getAttribute('src') || '';
+              mainImage.setAttribute('src', thumbnailSrc);
+            }
+          }
+        });
+      });
+    }
+  });
+</script>

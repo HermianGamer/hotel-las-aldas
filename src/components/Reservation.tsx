@@ -82,7 +82,7 @@ const Reservation = ({room}: ReservationProps) => {
 
     const numberOfDays = getNumberOfDays(bookingData.checkIn, bookingData.checkOut);
 
-    const totalPrice = room.price*bookingData.noOfRoom * numberOfDays!;
+    const totalPrice = room.price*bookingData.noOfRoom * numberOfDays! * room.capacity - (room.price * 0.3)*bookingData.children;
 
 
     return (
