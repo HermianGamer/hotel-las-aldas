@@ -46,7 +46,7 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
                 <div className="uppercase font-600 flex gap-1 md:gap-2 items-center text-sm md:text-base justify-end">
                     <ul>
                         <li className="inline-block md:mr-4 mr-2"><a href="/all">Reservar</a></li>
-                        <li className="inline-block md:mr-4 mr-2"><a href="/index">Experiencias</a></li>
+                        <li className="inline-block md:mr-4 mr-2"><a href="/#experiences">Experiencias</a></li>
                         <li className="inline-block md:mr-4 mr-2"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
                     </ul>
                 </div>
