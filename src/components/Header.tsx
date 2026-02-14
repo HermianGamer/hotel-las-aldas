@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import { ModeToggle } from '@/components/ModeToggle';
-import { Button } from './ui/button';
+import Login from './Login';
 
 interface HeaderProps {
     isHomePage?: boolean;
@@ -43,22 +43,24 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
         if (isHomePage) {
             // Home page: fixed, con efecto de scroll
             return (
-                <div className="uppercase font-600 flex gap-1 md:gap-2 items-center text-sm md:text-base justify-end">
+                <div className="uppercase font-600 text-sm md:text-base">
                     <ul>
                         <li className="inline-block md:mr-4 mr-2"><a href="/all">Reservar</a></li>
                         <li className="inline-block md:mr-4 mr-2"><a href="/#experiences">Experiencias</a></li>
                         <li className="inline-block md:mr-4 mr-2"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
+                        <li className="inline-flex items-center"><Login /></li>
                     </ul>
                 </div>
             );
         } else {
             // Otras páginas: sticky, siempre con fondo
             return (
-                <div className="uppercase font-600 flex gap-1 md:gap-2 items-center text-sm md:text-base justify-end">
+                <div className="uppercase font-600 text-sm md:text-base">
                     <ul>
                         <li className="inline-block md:mr-4 mr-2"><a href="/">Inicio</a></li>
                         <li className="inline-block md:mr-4 mr-2"><a href="/all">Reservar</a></li>
                         <li className="inline-block md:mr-4 mr-2"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
+                        <li className="inline-flex items-center"><Login /></li>
                     </ul>
                 </div>
             );
