@@ -55,7 +55,7 @@ const {
 	</head>
 
 	<body class="font-poppins">
-		<Header client:load isHomePage={isHomePage} />
+		<Header client:only="react" isHomePage={isHomePage} />
 
 		<slot />
 

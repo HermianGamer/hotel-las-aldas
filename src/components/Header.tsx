@@ -47,11 +47,13 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
             return (
                 <div className="uppercase font-600 text-sm md:text-base">
                     <ul>
-                        <li className="inline-block md:mr-4 mr-2"><a href="/all">Reservar</a></li>
-                        <li className="inline-block md:mr-4 mr-2"><a href="/#experiences">Experiencias</a></li>
-                        <li className="inline-block md:mr-4 mr-2"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
-                        <li className="inline-flex items-center"><Login /></li>
-                        <li className="inline-flex items-center"> <SignedIn> <Dashboard /> </SignedIn> </li>
+                        <li className="inline-block md:mr-4 mr-2 align-middle"><a href="/all">Reservar</a></li>
+                        <li className="inline-block md:mr-4 mr-2 align-middle"><a href="/#experiences">Experiencias</a></li>
+                        <li className="inline-block md:mr-4 mr-2 align-middle"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
+                        <li className="inline-block md:mr-4 mr-2 align-middle"><Login /></li>
+                        <SignedIn>
+                            <li className="inline-block align-middle"><Dashboard /></li>
+                        </SignedIn>
                     </ul>
                 </div>
             );
@@ -64,7 +66,9 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
                         <li className="inline-block md:mr-4 mr-2"><a href="/all">Reservar</a></li>
                         <li className="inline-block md:mr-4 mr-2"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
                         <li className="inline-flex items-center"><Login /></li>
-                        <li className="inline-flex items-center"> <SignedIn> <Dashboard /> </SignedIn> </li>
+                        <SignedIn>
+                            <li className="inline-block align-middle"><Dashboard /></li>
+                        </SignedIn>
                     </ul>
                 </div>
             );
