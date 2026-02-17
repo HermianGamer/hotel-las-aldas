@@ -40,7 +40,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      exclude: ['pane', '@clerk/astro', '@sanity/astro'],
+      exclude: ['@clerk/astro', '@sanity/astro'],
     }
   },
 
