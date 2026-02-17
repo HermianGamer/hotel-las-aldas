@@ -15,7 +15,14 @@ export default defineConfig({
   env: {
     schema: {
       PUBLIC_CLERK_PUBLISHABLE_KEY: envField.string({ context: "client", access: "public", optional: true }),
-      CLERK_SECRET_KEY: envField.string({ context: "client", access: "public", optional: true }),
+      CLERK_SECRET_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      SANITY_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      SANITY_DATASET: envField.string({ context: "client", access: "public", optional: true }),
+      SANITY_PROJECT_ID: envField.string({ context: "client", access: "public", optional: true }),
+      SIGNING_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+      STRIPE_SECRET_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      STRIPE_WEBHOOK_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+      PUBLIC_DOMAIN_URL: envField.string({ context: "client", access: "public", optional: true }),
     }
   },
 
@@ -31,7 +38,10 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['pane', '@clerk/astro', '@sanity/astro'],
+    }
   },
 
   adapter: netlify(),
