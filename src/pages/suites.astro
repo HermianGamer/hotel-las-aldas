@@ -1,11 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { rooms } from "../lib/constants";
 
 import RoomListing from '@/components/RoomListing'
+import { sanityClient } from "sanity:client";
+import type { Room } from "sanity.types";
 
-const filteredRooms =
-    rooms.filter((room) => room.category === 'suite') || [];
+const rooms = await sanityClient.fetch<Room[]>(
+    `*[_type == "room" && category == "suite" && isAvailable]
+    {"slug": slug.current, name, description, category, image, price, discount, thumbnailImgs }`
+)
 ---
 
 <Layout title="Suites">
@@ -20,9 +23,11 @@ const filteredRooms =
     </div>
     <div class="container pt-14">
         <div class="md:grid md:gap-9 md:grid-cols-2 lg:grid-cols-3">
-            {filteredRooms.map(room => (
+            {rooms.map(room => (
                 <RoomListing room={room} client:load />
             ))}
         </div>
     </div>
 </Layout>
+
+<!-- 24:45 -->

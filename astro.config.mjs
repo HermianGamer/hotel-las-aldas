@@ -38,11 +38,26 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()],
-    optimizeDeps: {
-      exclude: ['@clerk/astro', '@sanity/astro'],
-    }
-  },
+      plugins: [tailwindcss()],
+      optimizeDeps: {
+        force: true,
+        exclude: ['@clerk/astro', '@sanity/astro'],
+        include: [
+          'sanity',
+          'sanity/desk',
+          'sanity/structure',
+          'sanity/presentation',
+          '@sanity/vision',
+          '@sanity/client',
+          '@sanity/ui',
+          '@sanity/icons',
+          'void-elements',
+          'prop-types',
+          'debug',
+          'lodash',
+        ],
+      }
+    },
 
   adapter: netlify(),
   output: 'server'

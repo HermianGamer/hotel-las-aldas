@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import { ModeToggle } from '@/components/ModeToggle';
 import Login from './Login';
-import {SignedIn} from '@clerk/astro/react'
+import { SignedIn } from "@clerk/clerk-react";
 import Dashboard from './Dashboard';
+
 
 interface HeaderProps {
     isHomePage?: boolean;

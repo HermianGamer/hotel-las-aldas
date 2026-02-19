@@ -14,8 +14,10 @@ interface Props{
 	isHomePage?: boolean;
 }
 
-import Header from '../components/Header';
 import Footer from '@/components/Footer.astro'
+import ClerkWrapper from "../components/ClerkWrapper";
+import ToastProvider from '@/components/ToastProvider'
+
 
 const { 
 	title = 'Hotel Las Aldas',
@@ -55,10 +57,16 @@ const {
 	</head>
 
 	<body class="font-poppins">
-		<Header client:only="react" isHomePage={isHomePage} />
+
+		<ClerkWrapper
+		client:only="react"
+		publishableKey={import.meta.env.PUBLIC_CLERK_PUBLISHABLE_KEY}
+		isHomePage={isHomePage}
+		/>
 
 		<slot />
 
 		<Footer />
+		<ToastProvider client:load />
 	</body>
 </html>

@@ -1,4 +1,5 @@
 import type { Room } from "@/lib/types";
+import { urlForImage } from "@/lib/url-for-image";
 import { User } from "lucide-react";
 import { Star } from "lucide-react";
 
@@ -24,7 +25,7 @@ const RoomListing = ({room}:{room: Room}) => {
     <div className="relative h-65 flex items-center justify-center overflow-visible">
       <a href={`/room/${room.slug}`} className="block">
         <img
-          src={room.image.src}
+          src={urlForImage(room.image).url()}
           alt={room.name}
           className="max-h-full max-w-full transition-all duration-300 ease-in-out
                     group-hover:scale-110

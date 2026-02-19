@@ -1,5 +1,4 @@
 import { formatPrice } from "@/lib/helper";
-import type { Room } from "@/lib/types";
 import { useState, type ChangeEvent } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Label } from "@radix-ui/react-dropdown-menu";
@@ -9,6 +8,9 @@ import { format } from "date-fns";
 import { Input } from "./ui/input";
 import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
+import type {Room} from 'sanity.types';
+import { useAuth } from "@clerk/astro/react";
+import { toast } from "sonner";
 
 
 interface ReservationProps {
@@ -25,10 +27,11 @@ interface BookingData {
 }
 
 const Reservation = ({room}: ReservationProps) => {
+    const {userId} = useAuth()
     const [bookingData, setBookingData] = useState<BookingData>({
     checkIn: undefined,
     checkOut: undefined,
-    roomCategory: room.category,
+    roomCategory: room.category ?? '',
     noOfRoom:1,
     adults:  1,
     children:0,
@@ -46,13 +49,46 @@ const Reservation = ({room}: ReservationProps) => {
         }
     };
 
-    const handleCheckOutChange = (date: Date | undefined) => {
+    const handleCheckOutChange = async (date: Date | undefined) => {
         if (date) {
             const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             setBookingData(prev => ({
                 ...prev,
                 checkOut: localDate
             }));
+        }
+
+        const utcDate = new Date(
+            Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
+        );
+
+        if(bookingData.checkIn){
+            try{
+                const response = await fetch('/api/check-availability', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        roomSlug: room.slug,
+                        checkIn: bookingData.checkIn.toISOString(),
+                        checkOut: utcDate.toISOString(),
+                    })
+                })
+
+                const data = await response.json();
+
+                if(!data.available){
+                    toast.error('Este bungalow no está disponible para las fechas seleccionadas.');
+                    setBookingData(prev => ({
+                        ...prev,
+                        checkOut: undefined
+                    }))
+                }
+
+            }catch(error){
+                console.log('Error checking availability', error)
+            }
         }
     };
 
@@ -82,7 +118,7 @@ const Reservation = ({room}: ReservationProps) => {
 
     const numberOfDays = getNumberOfDays(bookingData.checkIn, bookingData.checkOut);
 
-    const totalPrice = room.price*bookingData.noOfRoom * numberOfDays! * room.capacity - (room.price * 0.3)*bookingData.children;
+    const totalPrice = (room.price ?? 0)*bookingData.noOfRoom * numberOfDays! * (room.capacity ?? 0) - ((room.price ?? 0) * 0.3)*bookingData.children;
 
 
     return (
@@ -102,23 +138,6 @@ const Reservation = ({room}: ReservationProps) => {
                 <p className="mb-6">
                     · Los bebés menores de 2 años se alojan gratuitamente.
                 </p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 <div className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 mb-6">
                     {/* Check In */}
@@ -170,13 +189,13 @@ const Reservation = ({room}: ReservationProps) => {
                     <div className="flex flex-col gap-2">
                         <Label>Adultos</Label>
                         <Input type='number' name='adults' className='bg-foreground/5 hover:bg-foreground/10 border-foreground/20'
-                        max={room.capacity - bookingData.children} min={1} value={bookingData.adults} onChange={handleNumberChange}/>
+                        max={(room.capacity ?? 0) - bookingData.children} min={1} value={bookingData.adults} onChange={handleNumberChange}/>
                     </div>
 
                     <div className="flex flex-col gap-2">
                         <Label>Niños</Label>
                         <Input type='number' name='children' className='bg-foreground/5 hover:bg-foreground/10 border-foreground/20'
-                        max={room.capacity - bookingData.adults} min={0} value={bookingData.children} onChange={handleNumberChange}/>
+                        max={(room.capacity ?? 0) - bookingData.adults} min={0} value={bookingData.children} onChange={handleNumberChange}/>
                     </div>
 
                 </div>

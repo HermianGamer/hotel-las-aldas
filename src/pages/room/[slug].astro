@@ -2,7 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import { rooms } from '@/lib/constants'
 import { Image } from "astro:assets";
-import { BedDouble, BedSingle, Beef, Camera, CookingPot, DoorClosed, Sofa, SolarPanel, Utensils } from "lucide-react";
+import { BedDouble, BedSingle, Beef, Camera, DoorClosed, Sofa, SolarPanel, Utensils } from "lucide-react";
 import { TbGrill } from "react-icons/tb";
 import { MdOutlineCountertops } from "react-icons/md";
 import Reservation from "@/components/Reservation";
@@ -31,10 +31,10 @@ if(slug === undefined){
 <Layout title={room?.name}>
     <div class="container pt-15">
       <div class="mb-8 text-center">
-        <h1 class="text-400 font-600 mb-4">{room.name}</h1>
+        <h1 class="text-400 font-600 mb-4">{room?.name}</h1>
 
         <div class="flex flex-wrap items-center justify-center gap-4">
-          {room.features.map(feature=> (
+          {room?.features.map(feature=> (
             <div class="flex items-center justify-center gap-2">
               {feature.icon === 'door-closed'&& <DoorClosed className="text-foreground" />}
               {feature.icon === 'bed-double'&& <BedDouble className="text-foreground" />}
