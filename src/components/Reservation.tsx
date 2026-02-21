@@ -118,15 +118,70 @@ const Reservation = ({room}: ReservationProps) => {
 
     const numberOfDays = getNumberOfDays(bookingData.checkIn, bookingData.checkOut);
 
-    const totalPrice = (room.price ?? 0)*bookingData.noOfRoom * numberOfDays! * (room.capacity ?? 0) - ((room.price ?? 0) * 0.3)*bookingData.children;
+    const totalPriceRes = (room.price ?? 0)*bookingData.noOfRoom * numberOfDays! * (room.capacity ?? 0) - ((room.price ?? 0) * 0.3)*bookingData.children;
+
+    const generateReservationId = () => {
+        const randomNum = Math.floor(Math.random() * 10000).toString().padStart(6, '0');
+        return `RES-${randomNum}`
+    }
+
+    const reservationId = generateReservationId();
+
+    const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        if(!userId) {
+            toast.error('Por favor iniciar sesion para hacer reservar.');
+            return;
+        }
+
+        try{
+            if(!bookingData.checkIn || !bookingData.checkOut){
+                toast.error('Por favor seleccionar fecha de check-in y check-out.');
+                return;
+            }
+
+            const bookingDetails ={
+                ...bookingData,
+                userBookingId: userId,
+                reservationId,
+                roomName: room.name,
+                roomId: room._id,
+                image: room.image,
+                totalPrice: totalPriceRes
+            };
+
+            const response = await fetch('api/create-checkout-session', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bookingDetails),
+            });
+
+            console.log('Respuesta',response)
+
+            if(!response.ok) {
+                throw new Error (`HTTP error: ${response.status}`);
+            }
+
+            const {url}  = await response.json()
+
+            window.location.href = url;
+
+        } catch(error) {
+            toast.error('Error en la reserva.');
+            console.log('Error making reservation.', error);
+        }
+    };
 
 
     return (
         <section className="mt-10 md:mt-0">
-            <form className="bg-secondary text-background dark:text-foreground px-6 pt-8 pb-6">
+            <div className="bg-secondary text-background dark:text-foreground px-6 pt-8 pb-6">
                 <div className="relative mb-4 flex items-center justify-between after:bg-background after:absolute after:-bottom-0.5 after:h-0.75 dark:after:bg-foreground after:w-full after:content-[' ']">
                     <h5 className="font-500 text-300">Reservar</h5>
-                    <p className="text-300 font-600">{Object.is(totalPrice, NaN) ? "S/ --" : formatPrice(totalPrice)}</p>
+                    <p className="text-300 font-600">{Object.is(totalPriceRes, NaN) ? "S/ --" : formatPrice(totalPriceRes)}</p>
                 </div>
 
                 <p className="mb-0">
@@ -139,7 +194,7 @@ const Reservation = ({room}: ReservationProps) => {
                     · Los bebés menores de 2 años se alojan gratuitamente.
                 </p>
 
-                <div className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 mb-6">
+                <form onSubmit={handleSubmit} className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 mb-6">
                     {/* Check In */}
                     <div>
                         <Label className="mb-2 block">Check In</Label>
@@ -198,25 +253,10 @@ const Reservation = ({room}: ReservationProps) => {
                         max={(room.capacity ?? 0) - bookingData.adults} min={0} value={bookingData.children} onChange={handleNumberChange}/>
                     </div>
 
-                </div>
+                    <Button type="submit" variant={'outline'} className="mt-8 w-full bg-foreground/5 hover:bg-foreground/10 border-foreground/20 text-background dark:text-foreground md:col-start-1 md:col-end-3">Reservar</Button>
 
-                <Button variant={'outline'} className="mt-8 w-full bg-foreground/5 hover:bg-foreground/10 border-foreground/20 text-background dark:text-foreground" type="submit">Reservar</Button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </form>
+                </form>
+            </div>
         </section>
         );
     };
