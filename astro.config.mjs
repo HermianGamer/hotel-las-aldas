@@ -20,8 +20,12 @@ export default defineConfig({
       SANITY_DATASET: envField.string({ context: "client", access: "public", optional: true }),
       SANITY_PROJECT_ID: envField.string({ context: "client", access: "public", optional: true }),
       SIGNING_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
-      STRIPE_SECRET_KEY: envField.string({ context: "server", access: "secret", optional: true }), //usar culqi
-      STRIPE_WEBHOOK_SECRET: envField.string({ context: "server", access: "secret", optional: true }), //usar culqi
+      CULQI_SECRET_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      PUBLIC_CULQI_PUBLIC_KEY: envField.string({ context: "client", access: "public", optional: true }),
+      PUBLIC_CULQI_ORDER_ID: envField.string({ context: "client", access: "public", optional: true }),
+      PUBLIC_CULQI_RSA_ID: envField.string({ context: "client", access: "public", optional: true }),
+      PUBLIC_CULQI_RSA_PUBLIC_KEY: envField.string({ context: "client", access: "public", optional: true }),
+      PUBLIC_CULQI_TITLE: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_DOMAIN_URL: envField.string({ context: "client", access: "public", optional: true }),
     }
   },

@@ -1,8 +1,8 @@
+// checkoutimplements.tsx :
+
 "use client";
 
-import type { Currency } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrayOfPrimitivesFunctions } from 'sanity';
 import { toast } from "sonner";
 
 
@@ -57,11 +57,11 @@ interface CulqiConfig {
 
 
 const CULQI_CONFIG = {
-    PUBLIC_KEY: process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY!,
-    ORDER_ID: process.env.NEXT_PUBLIC_CULQI_ORDER_ID!,
-    RSA_ID: process.env.NEXT_PUBLIC_CULQI_RSA_ID!,
-    RSA_PUBLIC_KEY: process.env.NEXT_PUBLIC_CULQI_RSA_PUBLIC_KEY!,
-    TITLE: process.env.NEXT_PUBLIC_CULQI_TITLE!,
+    PUBLIC_KEY: import.meta.env.PUBLIC_CULQI_PUBLIC_KEY,
+    ORDER_ID: import.meta.env.PUBLIC_CULQI_ORDER_ID,
+    RSA_ID: import.meta.env.PUBLIC_CULQI_RSA_ID,
+    RSA_PUBLIC_KEY: import.meta.env.PUBLIC_CULQI_RSA_PUBLIC_KEY,
+    TITLE: import.meta.env.PUBLIC_CULQI_TITLE,
     PAYMENT_METHODS: { yape: true },
 };
 
@@ -91,9 +91,10 @@ const Checkoutimplement = () => {
             options: {
                 lang: "auto",
                 installments: true,
-                modal: true,
+                modal: false,
                 paymentMethods: CULQI_CONFIG.PAYMENT_METHODS,
                 paymentMethodsSort: Object.keys(CULQI_CONFIG.PAYMENT_METHODS),
+                container: "#culqi-checkout-container", //ID del contenedor
             },
         }),
         []
@@ -109,7 +110,7 @@ const Checkoutimplement = () => {
                 // setIsProcessing(true);
                 // const amountInCentimos = Math.round(reservaData.total * 100);
 
-                const reponse = await fetch("/api/culqi/charge", {
+                const response = await fetch("/api/create-checkout-session", {
                     method: "POST",
                     headers: {"Content-Type":"application/json"},
                     body: JSON.stringify({
@@ -120,23 +121,19 @@ const Checkoutimplement = () => {
                     }),
                 });
 
-                const data = await reponse.json();
+                const data = await response.json();
 
                 if (data.success) {
-                    await crearReservaFinal();
+                    console.log("Pago exitoso: ", data.data)
                 } else {
                     setError(data.message || "error al procesar el pago");
-                    setIsProcessing(false);
                 }
             } catch (err) {
                 console.error("Error en el handleToken: ", err);
                 setError("Error de conexion. Intenta nuevamente");
-                setIsProcessing(false);
-            } finally {
-                setVerifyingPayment(false);
             }
         },
-        [reservaData, user?.email, crearReservaFinal]
+        [amount]
     );
 
 
@@ -162,7 +159,6 @@ const Checkoutimplement = () => {
                 } else {
                     console.log("Error", instance.error);
                     setError(instance.error?.user_message || "Error al procesar el pago");
-                    setLoading(false);
                 }
             };
 
@@ -204,7 +200,13 @@ const Checkoutimplement = () => {
     }, [amount, initializeCulqi]);
 
 
-  return <div>Checkoutimplement</div>;
+  return (
+    <div>
+        <div>
+
+        </div>
+    </div>
+  );
 };
 
 export default Checkoutimplement;

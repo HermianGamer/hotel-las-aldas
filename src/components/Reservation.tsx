@@ -1,3 +1,5 @@
+// reservation.tsx
+
 import { formatPrice } from "@/lib/helper";
 import { useState, type ChangeEvent } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -9,9 +11,11 @@ import { Input } from "./ui/input";
 import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
 import type {Room} from 'sanity.types';
-import { useAuth } from "@clerk/astro/react";
 import { toast } from "sonner";
-
+import { useCallback, useEffect, useRef } from "react";
+import { useAuth, } from "@clerk/astro/react";
+import { useSyncExternalStore } from "react";
+import { $userStore } from "@clerk/astro/client";
 
 interface ReservationProps {
     room: Room;
@@ -127,54 +131,143 @@ const Reservation = ({room}: ReservationProps) => {
 
     const reservationId = generateReservationId();
 
-    const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
-        event.preventDefault()
+    // Agregar al inicio del componente, junto a los otros useState
+    const culqiInstanceRef = useRef<any>(null);
+    const scriptsLoadedRef = useRef<boolean>(false);
 
-        if(!userId) {
-            toast.error('Por favor iniciar sesion para hacer reservar.');
+    const user = useSyncExternalStore($userStore.listen, $userStore.get, $userStore.get);
+
+    // Esta función se llama cuando Culqi genera el token exitosamente
+    const handleToken = useCallback(async (tokenId: string) => {
+        if (!bookingData.checkIn || !bookingData.checkOut || !userId) return;
+
+        try {
+            const response = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    token: tokenId,
+                    amount: Math.round(totalPriceRes * 100), // Culqi trabaja en centimos
+                    email: user?.primaryEmailAddress?.emailAddress ?? '',
+                    reservationId,
+                    userId,
+                    roomId: room._id,
+                    checkIn: bookingData.checkIn.toISOString().split('T')[0],
+                    checkOut: bookingData.checkOut.toISOString().split('T')[0],
+                    adults: bookingData.adults,
+                    children: bookingData.children,
+                    totalPrice: totalPriceRes,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                toast.success('¡Reserva confirmada! Tu pago fue procesado exitosamente.');
+                // Aquí puedes redirigir a una página de confirmación
+                // window.location.href = `/confirmacion/${reservationId}`;
+            } else {
+                toast.error(data.message || 'Error al procesar el pago');
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            toast.error('Error de conexión. Intenta nuevamente.');
+        }
+    }, [bookingData, totalPriceRes, reservationId, userId, room._id]);
+
+
+    // Inicializar Culqi con los datos actuales
+    const initializeCulqi = useCallback(() => {
+        if (!window.CulqiCheckout) return;
+
+        const instance = new window.CulqiCheckout(
+            import.meta.env.PUBLIC_CULQI_PUBLIC_KEY,
+            {
+                settings: {
+                    title: import.meta.env.PUBLIC_CULQI_TITLE,
+                    currency: 'PEN',
+                    amount: Math.round(totalPriceRes * 100),
+                    order: import.meta.env.PUBLIC_CULQI_ORDER_ID,
+                    xculqirsaid: import.meta.env.PUBLIC_CULQI_RSA_ID,
+                    rsapublickey: import.meta.env.PUBLIC_CULQI_RSA_PUBLIC_KEY,
+                },
+                client: {
+                    email: user?.primaryEmailAddress?.emailAddress ?? '' // idealmente de Clerk
+                },
+                options: {
+                    lang: 'auto',
+                    installments: false,
+                    modal: true,
+                    paymentMethods: { tarjeta: true, yape: true },
+                    paymentMethodsSort: ['tarjeta', 'yape'],
+                },
+            }
+        );
+
+        instance.culqi = function () {
+            if (instance.token) {
+                handleToken(instance.token.id);
+            } else {
+                toast.error(instance.error?.user_message || 'Error al procesar el pago');
+            }
+        };
+
+        culqiInstanceRef.current = instance;
+    }, [totalPriceRes, handleToken]);
+
+
+    // Cargar scripts de Culqi una sola vez
+    useEffect(() => {
+        if (scriptsLoadedRef.current) return;
+
+        const loadScript = (src: string): Promise<void> =>
+            new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                script.onload = () => resolve();
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+
+        const loadScripts = async () => {
+            try {
+                await loadScript('https://3ds.culqi.com');
+                await loadScript('https://js.culqi.com/checkout-js');
+                scriptsLoadedRef.current = true;
+                initializeCulqi();
+            } catch (err) {
+                toast.error('Error al cargar el sistema de pagos. Recarga la página.');
+            }
+        };
+
+        loadScripts();
+    }, [initializeCulqi]);
+
+
+    // Reemplaza tu handleSubmit actual con este:
+    const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if (!userId) {
+            toast.error('Por favor inicia sesión para reservar.');
             return;
         }
 
-        try{
-            if(!bookingData.checkIn || !bookingData.checkOut){
-                toast.error('Por favor seleccionar fecha de check-in y check-out.');
-                return;
-            }
-
-            const bookingDetails ={
-                ...bookingData,
-                userBookingId: userId,
-                reservationId,
-                roomName: room.name,
-                roomId: room._id,
-                image: room.image,
-                totalPrice: totalPriceRes
-            };
-
-            const response = await fetch('api/create-checkout-session', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(bookingDetails),
-            });
-
-            console.log('Respuesta',response)
-
-            if(!response.ok) {
-                throw new Error (`HTTP error: ${response.status}`);
-            }
-
-            const {url}  = await response.json()
-
-            window.location.href = url;
-
-        } catch(error) {
-            toast.error('Error en la reserva.');
-            console.log('Error making reservation.', error);
+        if (!bookingData.checkIn || !bookingData.checkOut) {
+            toast.error('Por favor selecciona fechas de check-in y check-out.');
+            return;
         }
-    };
 
+        if (Object.is(totalPriceRes, NaN) || totalPriceRes <= 0) {
+            toast.error('Error calculando el precio. Verifica las fechas.');
+            return;
+        }
+
+        // Reinicializar Culqi con el monto actualizado y abrir el checkout
+        initializeCulqi();
+        culqiInstanceRef.current?.open();
+    };
 
     return (
         <section className="mt-10 md:mt-0">
