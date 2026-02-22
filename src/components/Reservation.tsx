@@ -198,8 +198,13 @@ const Reservation = ({room}: ReservationProps) => {
                     lang: 'auto',
                     installments: false,
                     modal: true,
-                    paymentMethods: { tarjeta: true, yape: true },
-                    paymentMethodsSort: ['tarjeta', 'yape'],
+                    paymentMethods: {   tarjeta: true,
+                                        yape: true,
+                                        billetera: true,
+                                        bancaMovil: true,
+                                        agente: true,
+                                        cuotealo: true,	 },
+                    paymentMethodsSort: ['tarjeta', 'yape', 'billetera'],
                 },
             }
         );
