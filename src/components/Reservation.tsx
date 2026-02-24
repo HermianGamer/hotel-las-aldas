@@ -148,7 +148,7 @@ const Reservation = ({room}: ReservationProps) => {
                 body: JSON.stringify({
                     token: tokenId,
                     amount: Math.round(totalPriceRes * 100), // Culqi trabaja en centimos
-                    email: user?.primaryEmailAddress?.emailAddress ?? '',
+                    email: user?.emailAddresses?.[0]?.emailAddress ?? '',
                     reservationId,
                     userId,
                     roomId: room._id,
@@ -163,7 +163,7 @@ const Reservation = ({room}: ReservationProps) => {
             const data = await response.json();
 
             if (data.success) {
-                toast.success('¡Reserva confirmada! Tu pago fue procesado exitosamente.');
+                toast.success('¡Reserva confirmada! Tu pago fue procesado exitosamente. Puedes ver tus reservas en tu perfil.');
                 // Aquí puedes redirigir a una página de confirmación
                 // window.location.href = `/confirmacion/${reservationId}`;
             } else {
@@ -192,19 +192,19 @@ const Reservation = ({room}: ReservationProps) => {
                     rsapublickey: import.meta.env.PUBLIC_CULQI_RSA_PUBLIC_KEY,
                 },
                 client: {
-                    email: user?.primaryEmailAddress?.emailAddress ?? '' // idealmente de Clerk
+                    email: user?.emailAddresses?.[0]?.emailAddress ?? '', // idealmente de Clerk
                 },
                 options: {
                     lang: 'auto',
                     installments: false,
-                    modal: true,
+                    modal: false,
                     paymentMethods: {   tarjeta: true,
                                         yape: true,
                                         billetera: true,
                                         bancaMovil: true,
                                         agente: true,
                                         cuotealo: true,	 },
-                    paymentMethodsSort: ['tarjeta', 'yape', 'billetera'],
+                    paymentMethodsSort: ['tarjeta','billetera' ,'yape', 'bancaMovil', 'cuotealo', 'agente'],
                 },
             }
         );
@@ -218,7 +218,7 @@ const Reservation = ({room}: ReservationProps) => {
         };
 
         culqiInstanceRef.current = instance;
-    }, [totalPriceRes, handleToken]);
+    }, [totalPriceRes, handleToken, user]);
 
 
     // Cargar scripts de Culqi una sola vez
@@ -253,6 +253,9 @@ const Reservation = ({room}: ReservationProps) => {
     // Reemplaza tu handleSubmit actual con este:
     const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        console.log('Room ID:', room._id); // agrega esta línea
+        console.log('Room completo:', room); // y esta para ver todo
 
         if (!userId) {
             toast.error('Por favor inicia sesión para reservar.');

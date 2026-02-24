@@ -7,7 +7,7 @@ const roomTypes = [
 
 export default defineType({
     name: 'room',
-    title: 'Room',
+    title: 'Bungalows',
     type: 'document',
     fields: [
         defineField({

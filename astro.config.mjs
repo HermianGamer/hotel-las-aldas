@@ -9,7 +9,7 @@ import netlify from '@astrojs/netlify';
 // https://astro.build/config
 export default defineConfig({
   server:{
-      port: 3000
+    port: 3000,
   },
 
   env: {
@@ -30,7 +30,9 @@ export default defineConfig({
     }
   },
 
-  integrations: [react(), clerk(), sanity({
+  integrations: [react(),
+    clerk(),
+    sanity({
       projectId: 'iuu4f520',
       dataset: 'production',
       studioBasePath: '/admin',
@@ -64,5 +66,5 @@ export default defineConfig({
     },
 
   adapter: netlify(),
-  output: 'server'
+  output: 'server',
 });

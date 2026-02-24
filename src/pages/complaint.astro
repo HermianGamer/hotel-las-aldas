@@ -1,0 +1,203 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Libro de Reclamaciones">
+    <div class="container pt-15 pb-20">
+        <div class="mb-8 text-center">
+            <h1 class="text-400 font-600 mb-2">Libro de Reclamaciones</h1>
+        </div>
+
+        <div class="max-w-4xl mx-auto border border-foreground/20 rounded">
+
+            <!-- Cabecera -->
+            <div class="flex flex-col md:grid md:grid-cols-3 border-b border-foreground/20">
+                <div class="md:col-span-2 p-4 border-b md:border-b-0 md:border-r border-foreground/20">
+                    <h2 class="font-700 text-center uppercase tracking-wide">Libro de Reclamaciones</h2>
+                </div>
+                <div class="p-4">
+                    <p class="font-600 uppercase text-center md:text-left">Hoja de Reclamación Virtual</p>
+                </div>
+            </div>
+
+            <!-- Proveedor -->
+            <div class="p-3 border-b border-foreground/20 bg-foreground/5">
+                <p class="text-100"><span class="font-700">PROVEEDOR:</span> Hotel Las Aldas E.I.R.L.</p>
+                <p class="text-100"><span class="font-700">RUC:</span> 20609790564</p>
+                <p class="text-100"><span class="font-700">DOMICILIO:</span> OTR.CALETA LA GRAMITA KM. 347 ANCASH - CASMA - CASMA</p>
+            </div>
+
+            <!-- Sección 1 -->
+            <div class="border-b border-foreground/20">
+                <div class="bg-foreground/10 px-3 py-2 border-b border-foreground/20">
+                    <p class="font-700 uppercase text-100">1. Identificación del Consumidor Reclamante</p>
+                </div>
+                <div class="divide-y divide-foreground/20">
+                    <div class="p-3 flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                        <label class="font-600 text-100 md:w-36 md:shrink-0">NOMBRE: *</label>
+                        <input id="nombre" type="text" class="w-full md:flex-1 bg-transparent border-b border-foreground/30 focus:outline-none focus:border-foreground px-1 py-1" />
+                    </div>
+                    <div class="p-3 flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                        <label class="font-600 text-100 md:w-36 md:shrink-0">DNI / CE:</label>
+                        <input id="dni" type="text" class="w-full md:flex-1 bg-transparent border-b border-foreground/30 focus:outline-none focus:border-foreground px-1 py-1" />
+                    </div>
+                    <div class="p-3 flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                        <label class="font-600 text-100 md:w-36 md:shrink-0">DOMICILIO:</label>
+                        <input id="domicilio" type="text" class="w-full md:flex-1 bg-transparent border-b border-foreground/30 focus:outline-none focus:border-foreground px-1 py-1" />
+                    </div>
+                    <div class="p-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                            <label class="font-600 text-100 md:shrink-0">TELÉFONO:</label>
+                            <input id="telefono" type="tel" class="w-full md:flex-1 bg-transparent border-b border-foreground/30 focus:outline-none focus:border-foreground px-1 py-1" />
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                            <label class="font-600 text-100 md:shrink-0">E-MAIL: *</label>
+                            <input id="email" type="email" class="w-full md:flex-1 bg-transparent border-b border-foreground/30 focus:outline-none focus:border-foreground px-1 py-1" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 2 -->
+            <div class="border-b border-foreground/20">
+                <div class="bg-foreground/10 px-3 py-2 border-b border-foreground/20">
+                    <p class="font-700 uppercase text-100">2. Identificación del Bien Contratado</p>
+                </div>
+                <div class="p-3 space-y-4">
+                    <div class="flex flex-wrap items-center gap-4 md:gap-6">
+                        <label class="font-600 text-100">TIPO:</label>
+                        <label class="flex items-center gap-2 text-100 cursor-pointer">
+                            <input id="tipoProducto" name="tipoBien" type="radio" value="producto" class="accent-foreground" />
+                            Producto
+                        </label>
+                        <label class="flex items-center gap-2 text-100 cursor-pointer">
+                            <input id="tipoServicio" name="tipoBien" type="radio" value="servicio" class="accent-foreground" />
+                            Servicio
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                            <label class="font-600 text-100 md:shrink-0">MONTO RECLAMADO:</label>
+                            <input id="monto" type="text" class="w-full md:flex-1 bg-transparent border-b border-foreground/30 focus:outline-none focus:border-foreground px-1 py-1" />
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+                            <label class="font-600 text-100 md:shrink-0">DESCRIPCIÓN:</label>
+                            <input id="descripcion" type="text" class="w-full md:flex-1 bg-transparent border-b border-foreground/30 focus:outline-none focus:border-foreground px-1 py-1" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección 3 -->
+            <div class="border-b border-foreground/20">
+                <div class="bg-foreground/10 px-3 py-2 border-b border-foreground/20 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                    <p class="font-700 uppercase text-100">3. Detalle de la Reclamación y Pedido del Consumidor</p>
+                    <div class="flex items-center gap-4">
+                        <label class="flex items-center gap-2 text-100 font-600 cursor-pointer">
+                            <input id="tipoReclamo" name="tipoReclamo" type="radio" value="reclamo" class="accent-foreground" />
+                            RECLAMO¹
+                        </label>
+                        <label class="flex items-center gap-2 text-100 font-600 cursor-pointer">
+                            <input id="tipoQueja" name="tipoReclamo" type="radio" value="queja" class="accent-foreground" />
+                            QUEJA²
+                        </label>
+                    </div>
+                </div>
+                <div class="p-3 border-b border-foreground/20">
+                    <label class="font-600 text-100 block mb-2">DETALLE: *</label>
+                    <textarea id="detalle" rows="5" class="w-full bg-transparent border border-foreground/30 focus:outline-none focus:border-foreground p-2 rounded resize-none"></textarea>
+                </div>
+                <div class="p-3">
+                    <label class="font-600 text-100 block mb-2">PEDIDO:</label>
+                    <textarea id="pedido" rows="3" class="w-full bg-transparent border border-foreground/30 focus:outline-none focus:border-foreground p-2 rounded resize-none"></textarea>
+                </div>
+            </div>
+
+            <!-- Notas legales -->
+            <div class="p-3 bg-foreground/5 border-b border-foreground/20 space-y-1">
+                <p class="text-[0.65rem] text-foreground/70"><span class="font-600">¹ RECLAMO:</span> Disconformidad relacionada a los productos o servicios.</p>
+                <p class="text-[0.65rem] text-foreground/70"><span class="font-600">² QUEJA:</span> Disconformidad no relacionada a los productos o servicios; o, malestar o descontento respecto a la atención al público.</p>
+                <p class="text-[0.65rem] text-foreground/70">* La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante el INDECOPI.</p>
+                <p class="text-[0.65rem] text-foreground/70">* El proveedor debe dar respuesta al reclamo o queja en un plazo no mayor a quince (15) días hábiles, el cual es improrrogable.</p>
+            </div>
+
+            <!-- Botón enviar -->
+            <div class="p-4">
+                <p class="text-[0.7rem] text-foreground/50 mb-3">* Campos obligatorios</p>
+                <button
+                    id="btn-enviar"
+                    class="w-full py-3 bg-secondary text-background dark:text-foreground border border-foreground/20 hover:bg-secondary/80 transition-colors font-500 rounded"
+                >
+                    Enviar Reclamación
+                </button>
+                <p id="mensaje" class="text-center mt-4 hidden"></p>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btnEnviar = document.getElementById('btn-enviar') as HTMLButtonElement;
+    const mensaje = document.getElementById('mensaje') as HTMLParagraphElement;
+
+    const getValue = (id: string) => (document.getElementById(id) as HTMLInputElement)?.value?.trim() ?? '';
+    const getRadio = (name: string) => (document.querySelector(`input[name="${name}"]:checked`) as HTMLInputElement)?.value ?? '';
+
+    btnEnviar.addEventListener('click', async () => {
+        const nombre = getValue('nombre');
+        const email = getValue('email');
+        const detalle = getValue('detalle');
+
+        if (!nombre) { alert('Por favor ingresa tu nombre completo.'); return; }
+        if (!email || !email.includes('@')) { alert('Por favor ingresa un correo electrónico válido.'); return; }
+        if (!detalle) { alert('Por favor describe tu reclamo en el campo Detalle.'); return; }
+
+        btnEnviar.disabled = true;
+        btnEnviar.textContent = 'Enviando...';
+
+        try {
+            const response = await fetch('/api/submit-complaint', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre,
+                    email,
+                    dni: getValue('dni'),
+                    domicilio: getValue('domicilio'),
+                    telefono: getValue('telefono'),
+                    tipoBien: getRadio('tipoBien'),
+                    montoReclamado: getValue('monto'),
+                    descripcion: getValue('descripcion'),
+                    tipoReclamo: getRadio('tipoReclamo'),
+                    detalle,
+                    pedido: getValue('pedido'),
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                mensaje.textContent = '✓ Tu reclamación fue enviada exitosamente. Recibirás una respuesta en un plazo máximo de 15 días hábiles.';
+                mensaje.className = 'text-center text-green-600 font-500';
+                mensaje.classList.remove('hidden');
+                document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea').forEach((el) => {
+                    (el as HTMLInputElement).value = '';
+                });
+                document.querySelectorAll('input[type="radio"]').forEach((el) => {
+                    (el as HTMLInputElement).checked = false;
+                });
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (err) {
+            mensaje.textContent = '✗ Error al enviar. Por favor intenta nuevamente.';
+            mensaje.className = 'text-center text-red-500 font-500';
+            mensaje.classList.remove('hidden');
+        } finally {
+            btnEnviar.disabled = false;
+            btnEnviar.textContent = 'Enviar Reclamación';
+        }
+    });
+});
+</script>

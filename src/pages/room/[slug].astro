@@ -1,139 +1,158 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { rooms } from '@/lib/constants'
-import { Image } from "astro:assets";
-import { BedDouble, BedSingle, Beef, Camera, DoorClosed, Sofa, SolarPanel, Utensils } from "lucide-react";
+import { sanityClient } from "sanity:client";
+import type { Room } from "sanity.types";
+import { BedDouble, BedSingle, Camera, DoorClosed, Sofa, SolarPanel, Utensils, Users } from "lucide-react";
 import { TbGrill } from "react-icons/tb";
 import { MdOutlineCountertops } from "react-icons/md";
 import Reservation from "@/components/Reservation";
+import { urlFor } from "@/lib/sanityImageUrl"; // ajusta si tu helper tiene otro path
 
-export function getStaticPaths() {
-  return rooms.map(({slug}) => {
-    return{
-        params: {slug},
-    };
-  });
+const { slug } = Astro.params;
+
+if (!slug) {
+    return Astro.redirect('/404');
 }
 
-const {slug} = Astro.params;
+const room = await sanityClient.fetch<Room>(
+    `*[_type == "room" && slug.current == $slug][0]{
+        _id,
+        name,
+        "slug": slug.current,
+        category,
+        capacity,
+        description,
+        price,
+        discount,
+        isAvailable,
+        image,
+        imageInterior,
+        thumbnails,
+        features,
+        amenities,
+    }`,
+    { slug }
+);
 
-if(slug === undefined){
-  throw new Error ('Slug is required');
-}
-
-const room = rooms.find(room=> room.slug === slug);
-
-if(slug === undefined){
-  throw new Error ('Room not found');
+if (!room) {
+    return Astro.redirect('/404');
 }
 ---
 
-<Layout title={room?.name}>
+<Layout title={room.name}>
     <div class="container pt-15">
-      <div class="mb-8 text-center">
-        <h1 class="text-400 font-600 mb-4">{room?.name}</h1>
+        <div class="mb-8 text-center">
+            <h1 class="text-400 font-600 mb-4">{room.name}</h1>
 
-        <div class="flex flex-wrap items-center justify-center gap-4">
-          {room?.features.map(feature=> (
-            <div class="flex items-center justify-center gap-2">
-              {feature.icon === 'door-closed'&& <DoorClosed className="text-foreground" />}
-              {feature.icon === 'bed-double'&& <BedDouble className="text-foreground" />}
-              {feature.icon === 'bed-single'&& <BedSingle className="text-foreground" />}
-              {feature.icon === 'camera'&& <Camera  className="text-foreground" />}
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                {room.features?.map((feature: any) => (
+                    <div class="flex items-center justify-center gap-2">
+                        {feature.icon === 'door-closed' && <DoorClosed className="text-foreground" />}
+                        {feature.icon === 'bed-double' && <BedDouble className="text-foreground" />}
+                        {feature.icon === 'bed-single' && <BedSingle className="text-foreground" />}
+                        {feature.icon === 'camera' && <Camera className="text-foreground" />}
+                        <p>{feature.name}: <span>{feature.value}</span></p>
+                    </div>
+                ))}
 
-              <p> {feature.name}: <string>{feature.value}</string></p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <div>
-          <Image id="mainImage" class="h-125 object-cover w-full" src={room?.image_interior} alt={room?.name}/>
-        </div>
-
-        {room?.thumbnails && room.thumbnails.length > 0 && (
-          // Thumbnails de imagenes del bungalow
-          <div class="mt-4 flex items-center justify-center gap-0.5 overflow-x-auto pb-2">
-            <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="main">
-              <Image class="h-full w-full object-cover" src={room.image_interior} alt={`${room.name} - main`}/>
-            </div>
-
-            {room?.thumbnails.map((thumbnail, index) => (
-              <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index={index}>
-                <Image class="h-full w-full object-cover" src={thumbnail} alt={`${room.name} - thumbnail ${index + 1}`}/>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div class="mt-16 md:grid md:grid-cols-2 md:gap-8">
-        <div>
-          <div class="mb-8">
-            <h3 class="text-300 font-600 mb-4">Description</h3>
-            <p>{room?.description}</p>
-          </div>
-
-          <div>
-            <h3 class="text-300 font-600 mb-4">Room Amenities</h3>
-            <div class="mb-8 grid grid-cols-2 gap-4">
-              {room?.amenities.map(amenity => (
-                <div class="flex items-center gap-4">
-                  {amenity.icon === 'cooking-pot'&& <MdOutlineCountertops className="w-6 h-6 text-foreground" />}
-                  {amenity.icon === 'solar-panel'&& <SolarPanel className="text-foreground" />}
-                  {amenity.icon === 'sofa'&& <Sofa className="text-foreground" />}
-                  {amenity.icon === 'utensils'&& <Utensils className="text-foreground" />}
-                  {amenity.icon === 'beef'&& <TbGrill className="w-6 h-6 text-foreground" />}
-
-                  <p>{amenity.name}</p>
+                {/* Aforo */}
+                <div class="flex items-center justify-center gap-2">
+                    <Users className="text-foreground" />
+                    <p>Aforo: <span>{room.capacity}</span></p>
                 </div>
-              ))}
             </div>
-          </div>
-
-          <div>
-            <h3 class="text-300 font-600 mb-4">Customer Reviews</h3>
-            <p>Be the first to leave a review by booking a room!</p>
-          </div>
         </div>
 
+        <!-- imágenes -->
         <div>
-          <Reservation room={room} client:load />
+            <div>
+                <img id="mainImage" class="h-125 object-cover w-full"
+                    src={urlFor(room.imageInterior).url()}
+                    alt={room.name ?? ''}
+                />
+            </div>
+
+            {room.thumbnails && room.thumbnails.length > 0 && (
+                <div class="mt-4 flex items-center justify-center gap-0.5 overflow-x-auto pb-2">
+                    <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="main">
+                        <img class="h-full w-full object-cover"
+                            src={urlFor(room.imageInterior).url()}
+                            alt={`${room.name} - main`}
+                        />
+                    </div>
+                    {room.thumbnails.map((thumbnail: any, index: number) => (
+                        <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index={index}>
+                            <img class="h-full w-full object-cover"
+                                src={urlFor(thumbnail).url()}
+                                alt={`${room.name} - thumbnail ${index + 1}`}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-      </div>
+
+        <div class="mt-16 md:grid md:grid-cols-2 md:gap-8">
+            <div>
+                <div class="mb-8">
+                    <h3 class="text-300 font-600 mb-4">Description</h3>
+                    <p>{room.description}</p>
+                </div>
+
+                <div>
+                    <h3 class="text-300 font-600 mb-4">Room Amenities</h3>
+                    <div class="mb-8 grid grid-cols-2 gap-4">
+                        {room.amenities?.map((amenity: any) => (
+                            <div class="flex items-center gap-4">
+                                {amenity.icon === 'cooking-pot' && <MdOutlineCountertops className="w-6 h-6 text-foreground" />}
+                                {amenity.icon === 'solar-panel' && <SolarPanel className="text-foreground" />}
+                                {amenity.icon === 'sofa' && <Sofa className="text-foreground" />}
+                                {amenity.icon === 'utensils' && <Utensils className="text-foreground" />}
+                                {amenity.icon === 'beef' && <TbGrill className="w-6 h-6 text-foreground" />}
+                                <p>{amenity.name}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-300 font-600 mb-4">Customer Reviews</h3>
+                    <p>Be the first to leave a review by booking a room!</p>
+                </div>
+            </div>
+
+            <div>
+                <Reservation room={room} client:load />
+            </div>
+        </div>
     </div>
 </Layout>
 
-
 <script>
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const mainImage = document.getElementById('mainImage');
-    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    document.addEventListener('DOMContentLoaded', () => {
+        const mainImage = document.getElementById('mainImage');
+        const thumbnails = document.querySelectorAll('.thumbnail-item');
 
-    if (mainImage && thumbnails.length > 0){
-      const originalMainSrc = mainImage.getAttribute('src') || '';
+        if (mainImage && thumbnails.length > 0) {
+            const originalMainSrc = mainImage.getAttribute('src') || '';
 
-      thumbnails.forEach((thumbnail) => {
-        thumbnail.addEventListener('click', () => {
-          thumbnails.forEach((t) => t.classList.remove('border-foreground'));
+            thumbnails.forEach((thumbnail) => {
+                thumbnail.addEventListener('click', () => {
+                    thumbnails.forEach((t) => t.classList.remove('border-foreground'));
+                    thumbnail.classList.add('border-foreground');
 
-          thumbnail.classList.add('border-foreground');
+                    const index = thumbnail.getAttribute('data-index');
 
-          const index = thumbnail.getAttribute('data-index');
-
-          if(index === 'main'){
-            mainImage.setAttribute('src', originalMainSrc)
-          }else{
-            const thumbnailImg = thumbnail.querySelector('img')
-
-            if(thumbnailImg){
-              const thumbnailSrc = thumbnailImg.getAttribute('src') || '';
-              mainImage.setAttribute('src', thumbnailSrc);
-            }
-          }
-        })
-      })
-    }
-  });
+                    if (index === 'main') {
+                        mainImage.setAttribute('src', originalMainSrc);
+                    } else {
+                        const thumbnailImg = thumbnail.querySelector('img');
+                        if (thumbnailImg) {
+                            mainImage.setAttribute('src', thumbnailImg.getAttribute('src') || '');
+                        }
+                    }
+                });
+            });
+        }
+    });
 </script>

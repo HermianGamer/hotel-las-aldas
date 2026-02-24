@@ -2,7 +2,7 @@ import { ExternalUrlPreview } from "@/components/ExternalUrlPreview";
 
 export default{
     name: 'user',
-    title: 'User',
+    title: 'Users',
     type: 'document',
     fields: [
         {name: 'userId', title:'User ID', type: 'string', readOnly: true},

@@ -1,6 +1,6 @@
 import type { Room } from "@/lib/types";
 import { urlForImage } from "@/lib/url-for-image";
-import { User } from "lucide-react";
+import { Users } from "lucide-react";
 import { Star } from "lucide-react";
 
 
@@ -12,7 +12,7 @@ const RoomListing = ({room}:{room: Room}) => {
     {/* Specs */}
     <div className="grid grid-cols-2">
       <div className="flex gap-2">
-        <User />
+        <Users />
         <p>{room.capacity}</p>
       </div>
       <div className="flex justify-end gap-2">

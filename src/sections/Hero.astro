@@ -6,7 +6,7 @@ import Logo from "@/assets/logo.png";
 <section class="section1" data-parallax>
   <div class="hero-bg"></div>
   <div class="sand-overlay"></div>
-  <div class="logo mx-auto max-w-[80%] md:max-w-[40%]">
+  <div class="logo mx-auto max-w-[80%] md:max-w-[40%] mb-125">
     <Image src={Logo} alt="Logo Image"/>
   </div>
 </section>
@@ -31,7 +31,7 @@ import Logo from "@/assets/logo.png";
 
       // Logo se mueve más rápido (50% de la velocidad)
       if (logo) {
-        logo.style.transform = `translateY(${scrolled * 0.5}px)`;
+        logo.style.transform = `translateY(${scrolled * 1}px)`;
       }
     }
 
@@ -45,11 +45,3 @@ import Logo from "@/assets/logo.png";
     }
   });
 </script>
-
-  <!-- <div class="relative z-40">
-    <div class="container flex h-screen flex-col items-start justify-center">
-      <div class="z-40 mx-auto max-w-[80%] md:max-w-[40%] text-center">
-        <Image src={Logo} alt="Logo Image"/>
-      </div>
-    </div>
-  </div> -->

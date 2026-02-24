@@ -7,7 +7,7 @@ import type { Room } from "sanity.types";
 
 const rooms = await sanityClient.fetch<Room[]>(
     `*[_type == "room" && category == "suite" && isAvailable]
-    {"slug": slug.current, name, description, category, image, price, discount, thumbnailImgs }`
+    {"slug": slug.current, name, description, category, capacity, image, price, discount, thumbnailImgs }`
 )
 ---
 
@@ -29,5 +29,3 @@ const rooms = await sanityClient.fetch<Room[]>(
         </div>
     </div>
 </Layout>
-
-<!-- 24:45 -->

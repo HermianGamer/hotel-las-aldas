@@ -7,14 +7,13 @@ const roomTypes = [
 
 export default defineType({
     name: 'booking',
-    title: 'Booking',
+    title: 'Bookings',
     type: 'document',
     fields: [
         defineField({
             name: 'reservationId',
             title: 'Reservation ID',
             type: 'string',
-            readOnly: true,
             validation: (Rule) => Rule.required(),
         }),
 
@@ -38,35 +37,30 @@ export default defineType({
             name: 'checkIn',
             title: 'Check-in Date',
             type: 'date',
-            readOnly: true,
         }),
 
         defineField({
             name: 'checkOut',
             title: 'Check-out Date',
             type: 'date',
-            readOnly: true,
         }),
 
         defineField({
             name: 'adults',
             title: 'Adults',
             type: 'number',
-            readOnly: true,
         }),
 
         defineField({
             name: 'children',
             title: 'Children',
             type: 'number',
-            readOnly: true,
         }),
 
         defineField({
             name: 'totalPrice',
             title: 'Total Price',
             type: 'number',
-            readOnly: true,
         }),
 
         defineField({
@@ -107,7 +101,6 @@ export default defineType({
             name: 'createdAt',
             title: 'Created At',
             type: 'datetime',
-            readOnly: true,
         }),
     ],
 });
