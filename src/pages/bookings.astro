@@ -1,0 +1,93 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { sanityClient } from "sanity:client";
+const {userId} = Astro.locals.auth()
+import type {Booking} from 'sanity.types'
+import {urlForImage} from '@/lib/url-for-image'
+import { CalendarIcon } from "lucide-react";
+import { formatDate } from "@/lib/utils";
+
+type FetchedBooking = Omit<Booking, 'room'> & {
+    room?: {
+        name:string;
+        image: {
+            asset: {
+                _ref: string;
+            };
+        };
+    };
+};
+
+const bookings = await sanityClient.fetch<FetchedBooking[]>(
+    `*[_type == "booking" && user._ref == $userId && status != "cancelled"]{
+    _id,
+    reservationId,
+    checkIn,
+    checkOut,
+    user->{
+    name
+    },
+    room->{
+    name,
+    image},
+    status,
+    adults,
+    children,
+    noOfRoom,
+    totalPrice,
+    _createdAt
+    } | order(checkIn desc)`,
+    {userId}
+)
+---
+
+<Layout title="Bookings">
+    <div class="py-32">
+        <div class="containter text-center">
+            <div class="mb-8">
+                <h1 class="font-700 mb-2 text-3x1">Mis Reservas</h1>
+            </div>
+
+            {bookings.length === 0 ? (
+                <div class="py-16 text-center">
+                    <h3 class="mb-4 text-xl font-medium">No tienes reservas...</h3>
+                    <a class="bg-primary mt-6 inline-block px-6 py-2 text-foreground" href="/all">Ver Bungalows</a>
+                </div>
+            ): (
+                <div class="space-y-6">
+                    {bookings.map(booking => (
+                        <a href={`/booking/${booking.reservationId}`}>
+                            <div class="bg-foreground text-background relative max-w-[800px] mx-auto md:flex md:w-full md:items-center">
+                                {booking?.room?.image && (
+                                    <img
+                                    src={urlForImage(booking.room.image).url()}
+                                    alt={booking.room.name}
+                                    class="overflow-visible md:size-[180px]"
+                                    />
+                                )}
+
+                                <div class="p-4 md:w-full md:py-0">
+                                    <div class="mb-2 md:w-full">
+                                        <div class="flex items-center justify-between md:mb-6 md:w-full">
+                                            <h3 class="text-200 font-600">{booking.room?.name}</h3>
+                                            <span class="text-primary font-600">ID: {booking.reservationId}</span>
+                                        </div>
+
+                                        <div class="absolute top-4 left-4 flex bg-foreground p-2 md:static md:mb-6 md:bg-transparent md:p-0">
+                                            <div class="flex gap-2">
+                                                <CalendarIcon size={20} />
+                                                Check In: {formatDate(booking.checkIn!)}
+                                            </div>
+
+                                            <ArrowR
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                ))}
+                </div>
+            )}
+        </div>
+    </div>
+</Layout>

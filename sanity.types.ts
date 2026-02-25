@@ -13,59 +13,76 @@
  */
 
 // Source: schema.json
-export type SanityImagePaletteSwatch = {
-  _type: "sanity.imagePaletteSwatch";
-  background?: string;
-  foreground?: string;
-  population?: number;
-  title?: string;
-};
-
-export type SanityImagePalette = {
-  _type: "sanity.imagePalette";
-  darkMuted?: SanityImagePaletteSwatch;
-  lightVibrant?: SanityImagePaletteSwatch;
-  darkVibrant?: SanityImagePaletteSwatch;
-  vibrant?: SanityImagePaletteSwatch;
-  dominant?: SanityImagePaletteSwatch;
-  lightMuted?: SanityImagePaletteSwatch;
-  muted?: SanityImagePaletteSwatch;
-};
-
-export type SanityImageDimensions = {
-  _type: "sanity.imageDimensions";
-  height?: number;
-  width?: number;
-  aspectRatio?: number;
-};
-
-export type SanityFileAsset = {
+export type Pricing = {
   _id: string;
-  _type: "sanity.fileAsset";
+  _type: "pricing";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  source?: SanityAssetSourceData;
+  name?: string;
+  type?: "weekday" | "season";
+  weekdays?: Array<string>;
+  startDate?: string;
+  endDate?: string;
+  priceMultiplier?: number;
+  rooms?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "room";
+  }>;
+  isActive?: boolean;
 };
 
-export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
+export type Complaint = {
+  _id: string;
+  _type: "complaint";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  nombre?: string;
+  email?: string;
+  dni?: string;
+  domicilio?: string;
+  telefono?: string;
+  tipoBien?: "producto" | "servicio";
+  montoReclamado?: string;
+  descripcion?: string;
+  tipoReclamo?: "reclamo" | "queja";
+  detalle?: string;
+  pedido?: string;
+  createdAt?: string;
+};
+
+export type Booking = {
+  _id: string;
+  _type: "booking";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  reservationId?: string;
+  user?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "user";
+  };
+  room?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "room";
+  };
+  checkIn?: string;
+  checkOut?: string;
+  adults?: number;
+  children?: number;
+  totalPrice?: number;
+  status?: "pending" | "confirmed" | "checked-in" | "checked-out" | "cancelled";
+  paymentStatus?: "pending" | "paid" | "failed";
+  paymentId?: string;
+  createdAt?: string;
 };
 
 export type Room = {
@@ -135,12 +152,43 @@ export type Room = {
   isAvailable?: boolean;
 };
 
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
+export type User = {
+  _id: string;
+  _type: "user";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  userId?: string;
+  name?: string;
+  email?: string;
+  image?: string;
+  createdAt?: string;
+};
+
+export type SanityImagePaletteSwatch = {
+  _type: "sanity.imagePaletteSwatch";
+  background?: string;
+  foreground?: string;
+  population?: number;
+  title?: string;
+};
+
+export type SanityImagePalette = {
+  _type: "sanity.imagePalette";
+  darkMuted?: SanityImagePaletteSwatch;
+  lightVibrant?: SanityImagePaletteSwatch;
+  darkVibrant?: SanityImagePaletteSwatch;
+  vibrant?: SanityImagePaletteSwatch;
+  dominant?: SanityImagePaletteSwatch;
+  lightMuted?: SanityImagePaletteSwatch;
+  muted?: SanityImagePaletteSwatch;
+};
+
+export type SanityImageDimensions = {
+  _type: "sanity.imageDimensions";
+  height?: number;
+  width?: number;
+  aspectRatio?: number;
 };
 
 export type SanityImageHotspot = {
@@ -149,6 +197,36 @@ export type SanityImageHotspot = {
   y?: number;
   height?: number;
   width?: number;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityFileAsset = {
+  _id: string;
+  _type: "sanity.fileAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+  source?: SanityAssetSourceData;
 };
 
 export type SanityImageAsset = {
@@ -174,13 +252,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData;
 };
 
-export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
-
 export type SanityImageMetadata = {
   _type: "sanity.imageMetadata";
   location?: Geopoint;
@@ -192,38 +263,42 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
+export type Geopoint = {
+  _type: "geopoint";
+  lat?: number;
+  lng?: number;
+  alt?: number;
+};
+
 export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
 };
 
-export type User = {
-  _id: string;
-  _type: "user";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  userId?: string;
+export type SanityAssetSourceData = {
+  _type: "sanity.assetSourceData";
   name?: string;
-  email?: string;
-  image?: string;
-  createdAt?: string;
+  id?: string;
+  url?: string;
 };
 
 export type AllSanitySchemaTypes =
+  | Pricing
+  | Complaint
+  | Booking
+  | Room
+  | User
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
-  | SanityFileAsset
-  | Geopoint
-  | Room
-  | SanityImageCrop
   | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
   | SanityImageAsset
-  | SanityAssetSourceData
   | SanityImageMetadata
+  | Geopoint
   | Slug
-  | User;
+  | SanityAssetSourceData;
 
 export declare const internalGroqTypeReferenceTo: unique symbol;

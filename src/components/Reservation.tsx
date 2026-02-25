@@ -1,7 +1,7 @@
 // reservation.tsx
 
 import { formatPrice } from "@/lib/helper";
-import { useState, type ChangeEvent } from "react";
+import { useState, useEffect, type ChangeEvent, useCallback, useRef } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { cn } from "@/lib/utils";
@@ -10,10 +10,9 @@ import { format } from "date-fns";
 import { Input } from "./ui/input";
 import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
-import type {Room} from 'sanity.types';
+import type { Room } from 'sanity.types';
 import { toast } from "sonner";
-import { useCallback, useEffect, useRef } from "react";
-import { useAuth, } from "@clerk/astro/react";
+import { useAuth } from "@clerk/astro/react";
 import { useSyncExternalStore } from "react";
 import { $userStore } from "@clerk/astro/client";
 
@@ -22,28 +21,147 @@ interface ReservationProps {
 }
 
 interface BookingData {
-    checkIn: Date| undefined;
-    checkOut: Date| undefined;
+    checkIn: Date | undefined;
+    checkOut: Date | undefined;
     roomCategory: string;
     noOfRoom: number;
     adults: number;
     children: number;
 }
 
-const Reservation = ({room}: ReservationProps) => {
-    const {userId} = useAuth()
+interface PricingRule {
+    _id: string;
+    name: string;
+    type: 'weekday' | 'season';
+    weekdays?: string[];
+    startDate?: string;
+    endDate?: string;
+    priceMultiplier: number;
+    rooms?: { _ref: string }[];
+    isActive: boolean;
+}
+
+// Calcula el precio total noche por noche aplicando reglas de pricing
+const calculateTotalPrice = (
+    checkIn: Date,
+    checkOut: Date,
+    basePrice: number,
+    capacity: number,
+    children: number,
+    pricingRules: PricingRule[],
+    roomId: string
+) => {
+    let total = 0;
+    const current = new Date(checkIn);
+
+    while (current < checkOut) {
+        // El precio de cada noche puede variar según la regla
+        const nightPrice = getPriceForNight(current, basePrice, pricingRules, roomId);
+        total += nightPrice * capacity; // capacity es el multiplicador fijo
+        current.setDate(current.getDate() + 1);
+    }
+
+    // Descuento niños igual que antes
+    const childrenDiscount = (basePrice * 0.3) * children;
+    return total - childrenDiscount;
+};
+
+// Obtiene el precio para una noche específica
+const getPriceForNight = (
+    date: Date,
+    basePrice: number,
+    pricingRules: PricingRule[],
+    roomId: string
+): number => {
+    const dateStr = date.toISOString().split('T')[0];
+    const dayOfWeek = date.getDay().toString();
+
+    const applicableRules = pricingRules.filter(rule => {
+        if (!rule.isActive) return false;
+        if (rule.rooms && rule.rooms.length > 0) {
+            return rule.rooms.some(r => r._ref === roomId);
+        }
+        return true;
+    });
+
+    // Acumular todos los multiplicadores que apliquen
+    let combinedMultiplier = 1;
+
+    applicableRules.forEach(rule => {
+        if (rule.type === 'season' && rule.startDate && rule.endDate) {
+            if (dateStr >= rule.startDate && dateStr <= rule.endDate) {
+                combinedMultiplier *= rule.priceMultiplier;
+            }
+        }
+        if (rule.type === 'weekday' && rule.weekdays?.includes(dayOfWeek)) {
+            combinedMultiplier *= rule.priceMultiplier;
+        }
+    });
+
+    return basePrice * combinedMultiplier;
+};
+
+const Reservation = ({ room }: ReservationProps) => {
+    const { userId } = useAuth();
+    const user = useSyncExternalStore($userStore.listen, $userStore.get, $userStore.get);
+
     const [bookingData, setBookingData] = useState<BookingData>({
-    checkIn: undefined,
-    checkOut: undefined,
-    roomCategory: room.category ?? '',
-    noOfRoom:1,
-    adults:  1,
-    children:0,
-});
+        checkIn: undefined,
+        checkOut: undefined,
+        roomCategory: room.category ?? '',
+        noOfRoom: 1,
+        adults: 1,
+        children: 0,
+    });
+
+    const [pricingRules, setPricingRules] = useState<PricingRule[]>([]);
+    const [activeSeason, setActiveSeason] = useState<string | null>(null);
+
+    const culqiInstanceRef = useRef<any>(null);
+    const scriptsLoadedRef = useRef<boolean>(false);
+
+    // Cargar reglas de pricing desde Sanity al montar
+    useEffect(() => {
+        const fetchPricing = async () => {
+            try {
+                const response = await fetch('/api/get-pricing');
+                const data = await response.json();
+                if (data.rules) setPricingRules(data.rules);
+            } catch (err) {
+                console.error('Error cargando precios:', err);
+            }
+        };
+        fetchPricing();
+    }, []);
+
+    // Detectar si hay temporada activa para mostrar al usuario
+    useEffect(() => {
+        if (!bookingData.checkIn || !bookingData.checkOut) {
+            setActiveSeason(null);
+            return;
+        }
+
+        const current = new Date(bookingData.checkIn);
+        while (current < bookingData.checkOut) {
+            const dateStr = current.toISOString().split('T')[0];
+            const season = pricingRules.find(rule =>
+                rule.type === 'season' &&
+                rule.isActive &&
+                rule.startDate && rule.endDate &&
+                dateStr >= rule.startDate &&
+                dateStr <= rule.endDate
+            );
+            if (season) {
+                setActiveSeason(season.name);
+                return;
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        setActiveSeason(null);
+    }, [bookingData.checkIn, bookingData.checkOut, pricingRules]);
 
     const handleCheckInChange = (date: Date | undefined) => {
         if (date) {
-            // Asegura que la fecha se maneje en hora local
             const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
             setBookingData(prev => ({
                 ...prev,
@@ -56,88 +174,61 @@ const Reservation = ({room}: ReservationProps) => {
     const handleCheckOutChange = async (date: Date | undefined) => {
         if (date) {
             const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            setBookingData(prev => ({
-                ...prev,
-                checkOut: localDate
-            }));
+            setBookingData(prev => ({ ...prev, checkOut: localDate }));
         }
 
         const utcDate = new Date(
             Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
         );
 
-        if(bookingData.checkIn){
-            try{
+        if (bookingData.checkIn) {
+            try {
                 const response = await fetch('/api/check-availability', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         roomSlug: room.slug,
                         checkIn: bookingData.checkIn.toISOString(),
                         checkOut: utcDate.toISOString(),
                     })
-                })
+                });
 
                 const data = await response.json();
 
-                if(!data.available){
+                if (!data.available) {
                     toast.error('Este bungalow no está disponible para las fechas seleccionadas.');
-                    setBookingData(prev => ({
-                        ...prev,
-                        checkOut: undefined
-                    }))
+                    setBookingData(prev => ({ ...prev, checkOut: undefined }));
                 }
-
-            }catch(error){
-                console.log('Error checking availability', error)
+            } catch (error) {
+                console.log('Error checking availability', error);
             }
         }
     };
 
-    const handleNumberChange  = (e: ChangeEvent<HTMLInputElement>)=>{
-        const {name, value} = e.target;
-
-        setBookingData(prev => ({
-            ...prev,
-            [name]: parseInt(value, 10)
-        }))
-    };;
-
-    const getNumberOfDays = (startDate:Date | undefined, endDate:Date | undefined)=>{
-        if(!startDate || !endDate){
-            return;
-        }
-
-        const startDateTime = new Date(startDate).getTime()
-        const endDateTime = new Date(endDate).getTime()
-
-
-        const timeDifference = endDateTime - startDateTime;
-        const daysDifference = timeDifference / (1000 * 3600 * 24)
-
-        return Math.ceil(daysDifference);
+    const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setBookingData(prev => ({ ...prev, [name]: parseInt(value, 10) }));
     };
 
-    const numberOfDays = getNumberOfDays(bookingData.checkIn, bookingData.checkOut);
-
-    const totalPriceRes = (room.price ?? 0)*bookingData.noOfRoom * numberOfDays! * (room.capacity ?? 0) - ((room.price ?? 0) * 0.3)*bookingData.children;
+    const totalPriceRes = bookingData.checkIn && bookingData.checkOut
+        ? calculateTotalPrice(
+            bookingData.checkIn,
+            bookingData.checkOut,
+            room.price ?? 0,
+            room.capacity ?? 0,
+            bookingData.children,
+            pricingRules,
+            room._id ?? ''
+        )
+        : NaN;
 
     const generateReservationId = () => {
         const randomNum = Math.floor(Math.random() * 10000).toString().padStart(6, '0');
-        return `RES-${randomNum}`
-    }
+        return `RES-${randomNum}`;
+    };
 
     const reservationId = generateReservationId();
 
-    // Agregar al inicio del componente, junto a los otros useState
-    const culqiInstanceRef = useRef<any>(null);
-    const scriptsLoadedRef = useRef<boolean>(false);
-
-    const user = useSyncExternalStore($userStore.listen, $userStore.get, $userStore.get);
-
-    // Esta función se llama cuando Culqi genera el token exitosamente
     const handleToken = useCallback(async (tokenId: string) => {
         if (!bookingData.checkIn || !bookingData.checkOut || !userId) return;
 
@@ -147,7 +238,7 @@ const Reservation = ({room}: ReservationProps) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     token: tokenId,
-                    amount: Math.round(totalPriceRes * 100), // Culqi trabaja en centimos
+                    amount: Math.round(totalPriceRes * 100),
                     email: user?.emailAddresses?.[0]?.emailAddress ?? '',
                     reservationId,
                     userId,
@@ -163,9 +254,7 @@ const Reservation = ({room}: ReservationProps) => {
             const data = await response.json();
 
             if (data.success) {
-                toast.success('¡Reserva confirmada! Tu pago fue procesado exitosamente. Puedes ver tus reservas en tu perfil.');
-                // Aquí puedes redirigir a una página de confirmación
-                // window.location.href = `/confirmacion/${reservationId}`;
+                toast.success('¡Reserva confirmada! Tu pago fue procesado exitosamente.');
             } else {
                 toast.error(data.message || 'Error al procesar el pago');
             }
@@ -173,10 +262,8 @@ const Reservation = ({room}: ReservationProps) => {
             console.error('Error:', err);
             toast.error('Error de conexión. Intenta nuevamente.');
         }
-    }, [bookingData, totalPriceRes, reservationId, userId, room._id]);
+    }, [bookingData, totalPriceRes, reservationId, userId, room._id, user]);
 
-
-    // Inicializar Culqi con los datos actuales
     const initializeCulqi = useCallback(() => {
         if (!window.CulqiCheckout) return;
 
@@ -192,19 +279,21 @@ const Reservation = ({room}: ReservationProps) => {
                     rsapublickey: import.meta.env.PUBLIC_CULQI_RSA_PUBLIC_KEY,
                 },
                 client: {
-                    email: user?.emailAddresses?.[0]?.emailAddress ?? '', // idealmente de Clerk
+                    email: user?.emailAddresses?.[0]?.emailAddress ?? '',
                 },
                 options: {
                     lang: 'auto',
                     installments: false,
                     modal: false,
-                    paymentMethods: {   tarjeta: true,
-                                        yape: true,
-                                        billetera: true,
-                                        bancaMovil: true,
-                                        agente: true,
-                                        cuotealo: true,	 },
-                    paymentMethodsSort: ['tarjeta','billetera' ,'yape', 'bancaMovil', 'cuotealo', 'agente'],
+                    paymentMethods: {
+                        tarjeta: true,
+                        yape: true,
+                        billetera: true,
+                        bancaMovil: true,
+                        agente: true,
+                        cuotealo: true,
+                    },
+                    paymentMethodsSort: ['tarjeta', 'billetera', 'yape', 'bancaMovil', 'cuotealo', 'agente'],
                 },
             }
         );
@@ -220,8 +309,6 @@ const Reservation = ({room}: ReservationProps) => {
         culqiInstanceRef.current = instance;
     }, [totalPriceRes, handleToken, user]);
 
-
-    // Cargar scripts de Culqi una sola vez
     useEffect(() => {
         if (scriptsLoadedRef.current) return;
 
@@ -249,13 +336,8 @@ const Reservation = ({room}: ReservationProps) => {
         loadScripts();
     }, [initializeCulqi]);
 
-
-    // Reemplaza tu handleSubmit actual con este:
     const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        console.log('Room ID:', room._id); // agrega esta línea
-        console.log('Room completo:', room); // y esta para ver todo
 
         if (!userId) {
             toast.error('Por favor inicia sesión para reservar.');
@@ -272,7 +354,6 @@ const Reservation = ({room}: ReservationProps) => {
             return;
         }
 
-        // Reinicializar Culqi con el monto actualizado y abrir el checkout
         initializeCulqi();
         culqiInstanceRef.current?.open();
     };
@@ -285,18 +366,18 @@ const Reservation = ({room}: ReservationProps) => {
                     <p className="text-300 font-600">{Object.is(totalPriceRes, NaN) ? "S/ --" : formatPrice(totalPriceRes)}</p>
                 </div>
 
-                <p className="mb-0">
-                    · Los horarios de check-in y check-out son flexibles, contáctenos para coordinar.
-                </p>
-                <p className="mb-0">
-                    · La categoría "Niños" aplica para edades de 2 a 10 años.
-                </p>
-                <p className="mb-6">
-                    · Los bebés menores de 2 años se alojan gratuitamente.
-                </p>
+                {/* Aviso de temporada activa */}
+                {activeSeason && (
+                    <div className="mb-4 px-3 py-2 bg-background/10 rounded text-sm border border-background/20">
+                        Precio de temporada especial: <span className="font-600">{activeSeason}</span>
+                    </div>
+                )}
+
+                <p className="mb-0">· Los horarios de check-in y check-out son flexibles, contáctenos para coordinar.</p>
+                <p className="mb-0">· La categoría "Niños" aplica para edades de 2 a 10 años.</p>
+                <p className="mb-6">· Los bebés menores de 2 años se alojan gratuitamente.</p>
 
                 <form onSubmit={handleSubmit} className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 mb-6">
-                    {/* Check In */}
                     <div>
                         <Label className="mb-2 block">Check In</Label>
                         <Popover>
@@ -312,8 +393,8 @@ const Reservation = ({room}: ReservationProps) => {
                                     selected={bookingData.checkIn}
                                     onSelect={handleCheckInChange}
                                     disabled={(date) => {
-                                        const today = new Date()
-                                        today.setHours(0,0,0,0)
+                                        const today = new Date();
+                                        today.setHours(0, 0, 0, 0);
                                         return date < today;
                                     }}
                                 />
@@ -321,7 +402,6 @@ const Reservation = ({room}: ReservationProps) => {
                         </Popover>
                     </div>
 
-                    {/* Boton de fecha check out */}
                     <div>
                         <Label className="mb-2">Check Out</Label>
                         <Popover>
@@ -345,21 +425,20 @@ const Reservation = ({room}: ReservationProps) => {
                     <div className="flex flex-col gap-2">
                         <Label>Adultos</Label>
                         <Input type='number' name='adults' className='bg-foreground/5 hover:bg-foreground/10 border-foreground/20'
-                        max={(room.capacity ?? 0) - bookingData.children} min={1} value={bookingData.adults} onChange={handleNumberChange}/>
+                            max={(room.capacity ?? 0) - bookingData.children} min={1} value={bookingData.adults} onChange={handleNumberChange} />
                     </div>
 
                     <div className="flex flex-col gap-2">
                         <Label>Niños</Label>
                         <Input type='number' name='children' className='bg-foreground/5 hover:bg-foreground/10 border-foreground/20'
-                        max={(room.capacity ?? 0) - bookingData.adults} min={0} value={bookingData.children} onChange={handleNumberChange}/>
+                            max={(room.capacity ?? 0) - bookingData.adults} min={0} value={bookingData.children} onChange={handleNumberChange} />
                     </div>
 
                     <Button type="submit" variant={'outline'} className="mt-8 w-full bg-foreground/5 hover:bg-foreground/10 border-foreground/20 text-background dark:text-foreground md:col-start-1 md:col-end-3">Reservar</Button>
-
                 </form>
             </div>
         </section>
-        );
-    };
+    );
+};
 
-export default Reservation
+export default Reservation;
