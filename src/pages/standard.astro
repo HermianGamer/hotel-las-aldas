@@ -1,12 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import RoomListing from '@/components/RoomListing'
-import type { Room } from "sanity.types";
+
+import RoomListing from '@/components/RoomListing';
 import { sanityClient } from "sanity:client";
+import type { Room } from "sanity.types";
 
 const rooms = await sanityClient.fetch<Room[]>(
     `*[_type == "room" && category == "standard" && isAvailable]
-    {"slug": slug.current, name, description, category, image, price, discount, thumbnailImgs }`
+    {"slug": slug.current, name, description, category, capacity, image, price, discount, thumbnailImgs }`
 )
 ---
 
@@ -14,12 +15,13 @@ const rooms = await sanityClient.fetch<Room[]>(
     <div class="relative z-40 ">
         <div class="container flex items-start justify-center flex-col h-[20]">
             <div class="z-40 max-w-175 mx-auto">
-                <h2 class="mt-8 text-600 font-700 leading-[1.2] md:text-800">Standard Bungalows</h2>
+                <h2 class="mt-8 text-600 font-700 leading-[1.2] md:text-800">Bungalows Standard</h2>
             </div>
         </div>
     </div>
 
-    <div class="container pt-28">
+    </div>
+    <div class="container pt-14">
         <div class="md:grid md:gap-9 md:grid-cols-2 lg:grid-cols-3">
             {rooms.map(room => (
                 <RoomListing room={room} client:load />

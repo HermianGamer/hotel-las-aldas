@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 
-import RoomListing from '@/components/RoomListing'
+import RoomListing from '@/components/RoomListing';
 import { sanityClient } from "sanity:client";
 import type { Room } from "sanity.types";
 
@@ -11,11 +11,11 @@ const rooms = await sanityClient.fetch<Room[]>(
 )
 ---
 
-<Layout title="Suites">
+<Layout title="Bungalows Suite">
     <div class="relative z-40 ">
         <div class="container flex items-start justify-center flex-col h-[20]">
             <div class="z-40 max-w-175 mx-auto">
-                <h2 class="mt-8 text-600 font-700 leading-[1.2] md:text-800">Suite Bungalows</h2>
+                <h2 class="mt-8 text-600 font-700 leading-[1.2] md:text-800">Bungalows Suite</h2>
             </div>
         </div>
     </div>

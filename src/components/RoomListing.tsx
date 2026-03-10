@@ -1,7 +1,6 @@
 import type { Room } from "@/lib/types";
 import { urlForImage } from "@/lib/url-for-image";
 import { Users } from "lucide-react";
-import { Star } from "lucide-react";
 
 
 const RoomListing = ({room}:{room: Room}) => {
@@ -15,9 +14,8 @@ const RoomListing = ({room}:{room: Room}) => {
         <Users />
         <p>{room.capacity}</p>
       </div>
-      <div className="flex justify-end gap-2">
-        <Star />
-        <p>4.6</p>
+      <div className="flex justify-end gap-1">
+        <p className="font-10 text-lg align-end">S/. {room.price} p.p./noche</p>
       </div>
     </div>
 
