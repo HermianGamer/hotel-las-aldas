@@ -16,6 +16,7 @@ import { useAuth } from "@clerk/astro/react";
 import { useSyncExternalStore } from "react";
 import { $userStore } from "@clerk/astro/client";
 
+
 interface ReservationProps {
     room: Room;
 }
@@ -340,7 +341,7 @@ const Reservation = ({ room }: ReservationProps) => {
         event.preventDefault();
 
         if (!userId) {
-            toast.error('Por favor inicia sesión para reservar.');
+            toast.error('Iniciar sesión antes de reservar.');
             return;
         }
 

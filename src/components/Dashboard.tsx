@@ -54,24 +54,16 @@ const Dashboard = () => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className="mt-4 w-42.5"
+        className="z-[9999] mt-4 w-42.5"
         align="center"
       >
-        <DropdownMenuItem
-          asChild
-          className="cursor-pointer focus:bg-primary"
-        >
-          <a href="/account" className="w-full">
-            Mi Cuenta
-          </a>
-        </DropdownMenuItem>
 
         <DropdownMenuItem
           asChild
           className="cursor-pointer focus:bg-primary"
         >
           <a href="/bookings" className="w-full">
-            Reservas
+            Mis Reservas
           </a>
         </DropdownMenuItem>
 
@@ -83,7 +75,7 @@ const Dashboard = () => {
         >
           <SignOutButton redirectUrl="/">
             <button className="w-full text-left">
-              Cerrar sesión
+              Cerrar Sesión
             </button>
           </SignOutButton>
         </DropdownMenuItem>

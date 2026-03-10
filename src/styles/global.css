@@ -44,7 +44,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background: url('../assets/hero-bg.jpg') top center;
+  background: url('../assets/fondo.jpg') top center;
   background-size: cover;
   filter: blur(2px);
   z-index: 1;
@@ -59,7 +59,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background: url('../assets/sand.png') top center;
+  background: url('../assets/Generic-Ocean-4-16x9-1.png') top center;
   background-size: cover;
   z-index: 10;
   /* La arena NO se mueve */
@@ -71,7 +71,7 @@ body {
   position: absolute;
   top: -25%;
   left: 0;
-  background: url('../assets/hero-bg.jpg') center center;
+  background: url('../assets/fondo.jpg') center center;
   background-size: cover;
   filter: blur(2px);
   z-index: 1;
@@ -83,7 +83,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background: url('../assets/sand.png') top center;
+  background: url('../assets/Generic-Ocean-4-16x9-1.png') top center;
   background-size: cover;
   z-index: 2;
   pointer-events: none;

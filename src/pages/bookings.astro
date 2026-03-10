@@ -4,8 +4,9 @@ import { sanityClient } from "sanity:client";
 const {userId} = Astro.locals.auth()
 import type {Booking} from 'sanity.types'
 import {urlForImage} from '@/lib/url-for-image'
-import { CalendarIcon } from "lucide-react";
+import { ArrowRight, CalendarIcon } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import CancelBooking from "@/components/CancelBooking";
 
 type FetchedBooking = Omit<Booking, 'room'> & {
     room?: {
@@ -56,7 +57,7 @@ const bookings = await sanityClient.fetch<FetchedBooking[]>(
             ): (
                 <div class="space-y-6">
                     {bookings.map(booking => (
-                        <a href={`/booking/${booking.reservationId}`}>
+                        <div>
                             <div class="bg-foreground text-background relative max-w-[800px] mx-auto md:flex md:w-full md:items-center">
                                 {booking?.room?.image && (
                                     <img
@@ -74,17 +75,32 @@ const bookings = await sanityClient.fetch<FetchedBooking[]>(
                                         </div>
 
                                         <div class="absolute top-4 left-4 flex bg-foreground p-2 md:static md:mb-6 md:bg-transparent md:p-0">
-                                            <div class="flex gap-2">
+                                            <p class="flex gap-2">
                                                 <CalendarIcon size={20} />
-                                                Check In: {formatDate(booking.checkIn!)}
-                                            </div>
+                                                {formatDate(booking.checkIn!)}
+                                            </p>
 
-                                            <ArrowR
+                                            <ArrowRight />
+
+                                            <p class="flex gap-2">
+                                                <CalendarIcon size={20} />
+                                                {formatDate(booking.checkOut!)}
+                                            </p>
+
+                                            <p class="text-lg font-bold align-end">Precio: ${booking.totalPrice}</p>
                                         </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between">
+                                        <p>Adultos: ${booking.adults}</p>
+                                        <p>Niños: ${booking.children}</p>
+                                        <span class="inline-block px-3 py-1 text-small font-medium capitalize">{booking.status}</span>
+                                        
+                                        {booking.status != "cancelled" && <CancelBooking reservationId={booking.reservationId} client:load/>}
                                     </div>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                 ))}
                 </div>
             )}

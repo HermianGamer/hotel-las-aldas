@@ -35,10 +35,10 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
     const getHeaderClasses = () => {
         if (isHomePage) {
             // Home page: fixed, con efecto de scroll
-            return `fixed top-0 z-[9999] w-full ${scrolling ? "bg-background text-foreground animate-in duration-500" : "text-foreground dark:text-background animate-out duration-500"}`;
+            return `fixed top-0 z-[9998] w-full ${scrolling ? "bg-background text-foreground animate-in duration-500" : "text-foreground dark:text-background animate-out duration-500"}`;
         } else {
             // Otras páginas: sticky, siempre con fondo
-            return "sticky top-0 z-[9999] w-full bg-background text-foreground";
+            return "sticky top-0 z-[9998] w-full bg-background text-foreground";
         }
     }
 
@@ -48,7 +48,7 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
             return (
                 <div className="uppercase font-600 text-sm md:text-base">
                     <ul>
-                        <li className="inline-block md:mr-4 mr-2 align-middle"><a href="/all">Reservar</a></li>
+                        <li className="inline-block md:mr-4 mr-2 align-middle"><a href="/all">Bungalows</a></li>
                         <li className="inline-block md:mr-4 mr-2 align-middle"><a href="/#experiences">Experiencias</a></li>
                         <li className="inline-block md:mr-4 mr-2 align-middle"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
                         <li className="inline-block md:mr-4 mr-2 align-middle"><Login /></li>
@@ -64,7 +64,7 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
                 <div className="uppercase font-600 text-sm md:text-base">
                     <ul>
                         <li className="inline-block md:mr-4 mr-2"><a href="/">Inicio</a></li>
-                        <li className="inline-block md:mr-4 mr-2"><a href="/all">Reservar</a></li>
+                        <li className="inline-block md:mr-4 mr-2"><a href="/all">Bungalows</a></li>
                         <li className="inline-block md:mr-4 mr-2"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
                         <li className="inline-flex items-center"><Login /></li>
                         <SignedIn>
