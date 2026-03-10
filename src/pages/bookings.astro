@@ -71,7 +71,7 @@ const bookings = await sanityClient.fetch<FetchedBooking[]>(
                                     <div class="mb-2 md:w-full">
                                         <div class="flex items-center justify-between md:mb-6 md:w-full">
                                             <h3 class="text-200 font-600">{booking.room?.name}</h3>
-                                            <span class="text-primary font-600">ID: {booking.reservationId}</span>
+                                            <span class="text-lg font-bold align-end">Precio: ${booking.totalPrice}</span>
                                         </div>
 
                                         <div class="absolute top-4 left-4 flex bg-foreground p-2 md:static md:mb-6 md:bg-transparent md:p-0">
@@ -87,7 +87,6 @@ const bookings = await sanityClient.fetch<FetchedBooking[]>(
                                                 {formatDate(booking.checkOut!)}
                                             </p>
 
-                                            <p class="text-lg font-bold align-end">Precio: ${booking.totalPrice}</p>
                                         </div>
                                     </div>
 

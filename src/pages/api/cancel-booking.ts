@@ -26,7 +26,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const booking = await sanityClient.fetch(
       `*[_type == "booking" && reservationId == $reservationId && user._ref == $userId][0]._id`,
-      { reservationId, userId }
+      { reservationId, userId: `clerk-${userId}` }
     );
 
     if (!booking) {
