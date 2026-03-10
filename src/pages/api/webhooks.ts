@@ -50,7 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
                         {
                             createOrReplace: {
                                 _type: 'user',
-                                _id: id,
+                                _id: `clerk-${id}`,
                                 userId: id,
                                 name: `${first_name || ''} ${last_name || ''}`.trim(),
                                 email: email_addresses[0].email_address,
