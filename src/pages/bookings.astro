@@ -38,7 +38,7 @@ const bookings = await sanityClient.fetch<FetchedBooking[]>(
     totalPrice,
     _createdAt
     } | order(checkIn desc)`,
-    {userId}
+    {userId: `clerk-${userId}`}
 )
 ---
 
