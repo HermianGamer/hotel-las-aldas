@@ -231,7 +231,7 @@ const Reservation = ({ room }: ReservationProps) => {
     const reservationId = generateReservationId();
 
     const handleToken = useCallback(async (tokenId: string) => {
-        if (!bookingData.checkIn || !bookingData.checkOut || !userId) return;
+        if (!bookingData.checkIn || !bookingData.checkOut) return;
 
         try {
             const response = await fetch('/api/create-checkout-session', {
@@ -340,10 +340,6 @@ const Reservation = ({ room }: ReservationProps) => {
     const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!userId) {
-            toast.error('Iniciar sesión antes de reservar.');
-            return;
-        }
 
         if (!bookingData.checkIn || !bookingData.checkOut) {
             toast.error('Por favor selecciona fechas de check-in y check-out.');
