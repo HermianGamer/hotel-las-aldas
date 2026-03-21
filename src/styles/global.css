@@ -87,7 +87,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background: url('../assets/Generic-Ocean-4-16x9-1.png') top center;
+  background: url('../assets/Generic-Ocean-4-16x9-1.webp') top center;
   background-size: cover;
   z-index: 2;
   pointer-events: none;
