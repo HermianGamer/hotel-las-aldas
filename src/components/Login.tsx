@@ -13,7 +13,7 @@ const Login = () => {
     return (
     <SignedOut>
         <SignInButton signUpForceRedirectUrl={currentUrl} mode='modal'>
-            <Button className='uppercase font-semibold text-sm md:text-base'>Log In</Button>
+            <Button className='text-background uppercase font-semibold text-sm md:text-base'>Log In</Button>
         </SignInButton>
     </SignedOut>
     );

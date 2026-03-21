@@ -5,7 +5,6 @@ import { useState, useEffect, type ChangeEvent, useCallback, useRef } from "reac
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "./ui/input";
 import { Calendar } from "./ui/calendar";
@@ -357,7 +356,7 @@ const Reservation = ({ room }: ReservationProps) => {
 
     return (
         <section className="mt-10 md:mt-0">
-            <div className="bg-secondary text-background dark:text-foreground px-6 pt-8 pb-6">
+            <div className="bg-foreground text-background dark:text-foreground px-6 pt-8 pb-6">
                 <div className="relative mb-4 flex items-center justify-between after:bg-background after:absolute after:-bottom-0.5 after:h-0.75 dark:after:bg-foreground after:w-full after:content-[' ']">
                     <h5 className="font-500 text-300">Reservar</h5>
                     <p className="text-300 font-600">{Object.is(totalPriceRes, NaN) ? "S/ --" : formatPrice(totalPriceRes)}</p>
@@ -366,7 +365,7 @@ const Reservation = ({ room }: ReservationProps) => {
                 {/* Aviso de temporada activa */}
                 {activeSeason && (
                     <div className="mb-4 px-3 py-2 bg-background/10 rounded text-sm border border-background/20">
-                        Precio de temporada especial: <span className="font-600">{activeSeason}</span>
+                        Precio de temporada: <span className="font-600">{activeSeason}</span>
                     </div>
                 )}
 
@@ -379,8 +378,7 @@ const Reservation = ({ room }: ReservationProps) => {
                         <Label className="mb-2 block">Check In</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button type="button" variant={'outline'} className={cn('w-full justify-start overflow-hidden text-left font-normal bg-foreground/5 hover:bg-foreground/10 border-foreground/20 text-background dark:text-foreground', !bookingData.checkIn && 'text-background dark:text-foreground')}>
-                                    <CalendarIcon className="mr-2 h-4 w-4 text-background dark:text-foreground" />
+                                <Button type="button" variant={'outline'} className={cn('w-full justify-start overflow-hidden text-left font-normal bg-foreground/5 hover:bg-background border-foreground/20 text-background dark:text-foreground', !bookingData.checkIn && 'text-background dark:text-foreground')}>
                                     {bookingData.checkIn ? format(bookingData.checkIn, 'PPP') : 'Elige una fecha'}
                                 </Button>
                             </PopoverTrigger>
@@ -403,8 +401,7 @@ const Reservation = ({ room }: ReservationProps) => {
                         <Label className="mb-2">Check Out</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button type="button" variant={'outline'} className={cn('w-full justify-start overflow-hidden text-left font-normal bg-foreground/5 hover:bg-foreground/10 border-foreground/20 text-background dark:text-foreground', !bookingData.checkOut && 'text-background dark:text-foreground')}>
-                                    <CalendarIcon className="mr-2 h-4 w-4 text-background dark:text-foreground" />
+                                <Button type="button" variant={'outline'} className={cn('w-full justify-start overflow-hidden text-left font-normal bg-foreground/5 hover:bg-background border-foreground/20 text-background dark:text-foreground', !bookingData.checkOut && 'text-background dark:text-foreground')}>
                                     {bookingData.checkOut ? format(bookingData.checkOut, 'PPP') : 'Elige una fecha'}
                                 </Button>
                             </PopoverTrigger>
@@ -421,17 +418,17 @@ const Reservation = ({ room }: ReservationProps) => {
 
                     <div className="flex flex-col gap-2">
                         <Label>Adultos</Label>
-                        <Input type='number' name='adults' className='bg-foreground/5 hover:bg-foreground/10 border-foreground/20'
+                        <Input type='number' name='adults' className='bg-foreground/5 border-foreground/20'
                             max={(room.capacity ?? 0) - bookingData.children} min={1} value={bookingData.adults} onChange={handleNumberChange} />
                     </div>
 
                     <div className="flex flex-col gap-2">
                         <Label>Niños</Label>
-                        <Input type='number' name='children' className='bg-foreground/5 hover:bg-foreground/10 border-foreground/20'
+                        <Input type='number' name='children' className='bg-foreground/5 border-foreground/20'
                             max={(room.capacity ?? 0) - bookingData.adults} min={0} value={bookingData.children} onChange={handleNumberChange} />
                     </div>
 
-                    <Button type="submit" variant={'outline'} className="mt-8 w-full bg-foreground/5 hover:bg-foreground/10 border-foreground/20 text-background dark:text-foreground md:col-start-1 md:col-end-3">Reservar</Button>
+                    <Button type="submit" variant={'outline'} className="mt-8 w-full bg-foreground/5 hover:bg-background border-foreground/20 text-background dark:text-foreground md:col-start-1 md:col-end-3">Reservar</Button>
                 </form>
             </div>
         </section>

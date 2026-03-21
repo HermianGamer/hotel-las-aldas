@@ -11,11 +11,10 @@ const RoomListing = ({room}:{room: Room}) => {
     {/* Specs */}
     <div className="grid grid-cols-2">
       <div className="flex gap-2">
-        <Users />
-        <p>{room.capacity}</p>
+        <p className=" text-lg align-start">Aforo: {room.capacity}</p>
       </div>
       <div className="flex justify-end gap-1">
-        <p className="font-10 text-lg align-end">S/. {room.price} p.p./noche</p>
+        <p className=" text-lg align-end">S/. {room.price*room.capacity}</p>
       </div>
     </div>
 
