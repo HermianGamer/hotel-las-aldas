@@ -3,7 +3,7 @@
 import { formatPrice } from "@/lib/helper";
 import { useState, useEffect, type ChangeEvent, useCallback, useRef } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Label } from "@radix-ui/react-dropdown-menu";
+import { Label } from "@radix-ui/react-label";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Input } from "./ui/input";

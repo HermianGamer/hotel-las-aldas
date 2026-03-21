@@ -9,13 +9,7 @@
   }
 }
 
-@font-face {
-    font-family: 'Libre Baskerville';
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Playwrite PE';
+* {
     font-display: swap;
 }
 

@@ -21,7 +21,7 @@ import aldas3 from '../../assets/Vistaaldas1.jpg'
             <div>
                 <Image 
                     id="mainImage"
-                    class="h-125 object-cover w-full" 
+                    class="h-125 object-cover w-full cursor-zoom-in" 
                     src= {aldas}
                     alt="Actividad principal"
                 />
@@ -82,33 +82,198 @@ import aldas3 from '../../assets/Vistaaldas1.jpg'
             </div>
         </div>
     </div>
+
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Visor de imagen">
+        <button id="lightbox-close" class="lightbox-close" aria-label="Cerrar">&#x2715;</button>
+        <button id="lightbox-prev" class="lightbox-arrow lightbox-arrow--left" aria-label="Imagen anterior">&#8592;</button>
+        <div class="lightbox-img-wrapper">
+            <img id="lightbox-img" src="" alt="Imagen ampliada" />
+        </div>
+        <button id="lightbox-next" class="lightbox-arrow lightbox-arrow--right" aria-label="Imagen siguiente">&#8594;</button>
+        <div id="lightbox-counter" class="lightbox-counter"></div>
+    </div>
 </Layout>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const mainImage = document.getElementById('mainImage');
-    const thumbnails = document.querySelectorAll('.thumbnail-item');
-    
-    if (mainImage && thumbnails.length > 0) {
-      const originalMainSrc = mainImage.getAttribute('src') || '';
-      
-      thumbnails.forEach((thumbnail) => {
-        thumbnail.addEventListener('click', () => {
-          thumbnails.forEach((t) => t.classList.remove('border-foreground'));
-          thumbnail.classList.add('border-foreground');
-          
-          const index = thumbnail.getAttribute('data-index');
-          if (index === 'main') {
-            mainImage.setAttribute('src', originalMainSrc);
-          } else {
-            const thumbnailImg = thumbnail.querySelector('img');
-            if (thumbnailImg) {
-              const thumbnailSrc = thumbnailImg.getAttribute('src') || '';
-              mainImage.setAttribute('src', thumbnailSrc);
-            }
-          }
-        });
-      });
+<style>
+    /* ── Lightbox overlay ── */
+    .lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.92);
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.25s ease;
     }
-  });
+    .lightbox.is-open {
+        display: flex;
+        opacity: 1;
+    }
+
+    /* ── Image wrapper ── */
+    .lightbox-img-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: calc(100vw - 160px);
+        max-height: calc(100vh - 80px);
+    }
+    .lightbox-img-wrapper img {
+        max-width: 100%;
+        max-height: calc(100vh - 80px);
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 4px;
+        box-shadow: 0 8px 60px rgba(0,0,0,0.6);
+        transition: opacity 0.2s ease;
+    }
+    .lightbox-img-wrapper img.is-loading {
+        opacity: 0;
+    }
+
+    /* ── Close button ── */
+    .lightbox-close {
+        position: fixed;
+        top: 20px;
+        right: 24px;
+        color: oklch(0.9521 0.0221 80.69);
+        font-size: 1.25rem;
+        width: 42px;
+        height: 42px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease, transform 0.2s ease;
+        z-index: 10001;
+    }
+    .lightbox-close:hover {
+        background: rgba(255,255,255,0.25);
+        transform: scale(1.1);
+    }
+
+    /* ── Arrow buttons ── */
+    .lightbox-arrow {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        color: oklch(0.9521 0.0221 80.69);
+        font-size: 1.5rem;
+        width: 52px;
+        height: 52px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease, transform 0.2s ease;
+        z-index: 10001;
+    }
+    .lightbox-arrow:hover {
+        background: rgba(255,255,255,0.25);
+        transform: translateY(-50%) scale(1.1);
+    }
+    .lightbox-arrow--left  { left: 20px; }
+    .lightbox-arrow--right { right: 20px; }
+
+    /* ── Counter ── */
+    .lightbox-counter {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255,255,255,0.6);
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const mainImage   = document.getElementById('mainImage') as HTMLImageElement | null;
+        const thumbnails  = document.querySelectorAll<HTMLElement>('.thumbnail-item');
+        const lightbox    = document.getElementById('lightbox');
+        const lbImg       = document.getElementById('lightbox-img') as HTMLImageElement | null;
+        const lbClose     = document.getElementById('lightbox-close');
+        const lbPrev      = document.getElementById('lightbox-prev');
+        const lbNext      = document.getElementById('lightbox-next');
+        const lbCounter   = document.getElementById('lightbox-counter');
+
+        if (!mainImage || !lightbox || !lbImg) return;
+
+        // ── Build image list from thumbnails ──────────────────────────
+        const images: { src: string; alt: string }[] = [];
+        thumbnails.forEach((thumb) => {
+            const img = thumb.querySelector('img');
+            if (img) images.push({ src: img.getAttribute('src') || '', alt: img.alt });
+        });
+
+        let currentIndex = 0;
+
+        // ── Thumbnail click → update main image ───────────────────────
+        thumbnails.forEach((thumb) => {
+            thumb.addEventListener('click', () => {
+                const idx = parseInt(thumb.getAttribute('data-index') || '0', 10);
+                currentIndex = idx;
+                thumbnails.forEach(t => t.classList.remove('border-foreground'));
+                thumb.classList.add('border-foreground');
+                if (mainImage && images[idx]) {
+                    mainImage.setAttribute('src', images[idx].src);
+                    mainImage.setAttribute('data-index', String(idx));
+                }
+            });
+        });
+
+        // ── Open lightbox ─────────────────────────────────────────────
+        function openLightbox(index: number) {
+            currentIndex = index;
+            showImage(currentIndex);
+            lightbox.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ── Close lightbox ────────────────────────────────────────────
+        function closeLightbox() {
+            lightbox.classList.remove('is-open');
+            document.body.style.overflow = '';
+        }
+
+        // ── Show image by index ───────────────────────────────────────
+        function showImage(index: number) {
+            if (!images.length) return;
+            const i = (index + images.length) % images.length;
+            currentIndex = i;
+            lbImg.classList.add('is-loading');
+            lbImg.onload = () => lbImg.classList.remove('is-loading');
+            lbImg.src = images[i].src;
+            lbImg.alt = images[i].alt;
+            if (lbCounter) lbCounter.textContent = `${i + 1} / ${images.length}`;
+        }
+
+        // ── Main image click → open at current index ──────────────────
+        mainImage.addEventListener('click', () => {
+            const idx = parseInt(mainImage.getAttribute('data-index') || '0', 10);
+            openLightbox(idx);
+        });
+
+        // ── Controls ──────────────────────────────────────────────────
+        lbClose?.addEventListener('click', closeLightbox);
+        lbPrev?.addEventListener('click',  () => showImage(currentIndex - 1));
+        lbNext?.addEventListener('click',  () => showImage(currentIndex + 1));
+
+        // Click outside image closes lightbox
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('is-open')) return;
+            if (e.key === 'Escape')      closeLightbox();
+            if (e.key === 'ArrowLeft')   showImage(currentIndex - 1);
+            if (e.key === 'ArrowRight')  showImage(currentIndex + 1);
+        });
+    });
 </script>
