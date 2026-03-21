@@ -9,6 +9,16 @@
   }
 }
 
+@font-face {
+    font-family: 'Libre Baskerville';
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Playwrite PE';
+    font-display: swap;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -59,7 +69,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background: url('../assets/Generic-Ocean-4-16x9-1.png') top center;
+  background: url('../assets/aqcr3ljtwi2zzwverxjk.webp') top center;
   background-size: cover;
   z-index: 10;
   /* La arena NO se mueve */

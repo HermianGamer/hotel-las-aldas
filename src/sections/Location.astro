@@ -1,3 +1,8 @@
+---
+import { Image } from 'astro:assets';
+import Mapa from '../assets/mapa.webp';
+---
+
 
 <section class="bg-foreground mt-28">
     <div class="container py-16">
@@ -45,11 +50,7 @@
                 target="_blank"
                 aria-label="Ver Hotel Las Aldas en Google Maps"
                 >
-                    <img
-                    src="src/assets/mapa.webp"
-                    alt="Ubicación Hotel Las Aldas en Google Maps"
-                    class="h-full w-full object-cover cursor-pointer"
-                    />
+                    <Image class="h-full w-full object-cover cursor-pointer" src={Mapa} alt="Ubicación Hotel Las Aldas en Google Maps"/>
                 </a>
              </div>
         </div>

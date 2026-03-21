@@ -1,5 +1,7 @@
 ---
-import { Button } from "./ui/button.tsx"
+import { Button } from "./ui/button.tsx";
+import { Image } from "astro:assets";
+import Libro from "../assets/reclamaciones.png";
 ---
 
 
@@ -19,7 +21,7 @@ import { Button } from "./ui/button.tsx"
                 </p>
 
                 <a href="/all" class="hover:text-primary transition-colors duration-300 ease-in-out">
-                    <Button variant="outline" className="uppercase font-600 dark:border-primary dark:hover:bg-primary dark:hover:text-foreground">Reservar</Button>
+                    <Button variant="default" className="uppercase font-600">Reservar</Button>
                 </a>
         </div>
 
@@ -45,7 +47,7 @@ import { Button } from "./ui/button.tsx"
                 <ul class="list-none">
                     <li class="mb-2">
                         <a href="/complaint" class="flex items-center gap-2 hover:text-primary transitions-colors duration-300 ease">
-                            <img class="h-8" src="/src/assets/reclamaciones.png" alt="reclamaciones">
+                            <Image src={Libro} class="h-8 w-13" alt="reclamaciones"/>
                             <p>Libro de Reclamaciones</p>
                         </a>
                     </li>
