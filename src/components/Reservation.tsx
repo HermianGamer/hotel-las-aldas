@@ -63,7 +63,7 @@ const calculateTotalPrice = (
 
     // Descuento niños igual que antes
     const childrenDiscount = (basePrice * 0.3) * children;
-    return total - childrenDiscount;
+    return Math.floor(total - childrenDiscount);
 };
 
 // Obtiene el precio para una noche específica
@@ -230,6 +230,7 @@ const Reservation = ({ room }: ReservationProps) => {
     const reservationId = generateReservationId();
 
     const handleToken = useCallback(async (tokenId: string) => {
+
         if (!bookingData.checkIn || !bookingData.checkOut) return;
 
         try {
@@ -339,6 +340,13 @@ const Reservation = ({ room }: ReservationProps) => {
     const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        toast.error('Página web en mantenimiento. Reservas al +51 923 381 810.');
+        return;
+
+        if (!userId) {
+            toast.error('Iniciar sesión antes de reservar.');
+            return;
+        }
 
         if (!bookingData.checkIn || !bookingData.checkOut) {
             toast.error('Por favor selecciona fechas de check-in y check-out.');
@@ -359,7 +367,7 @@ const Reservation = ({ room }: ReservationProps) => {
             <div className="bg-foreground text-background dark:text-foreground px-6 pt-8 pb-6">
                 <div className="relative mb-4 flex items-center justify-between after:bg-background after:absolute after:-bottom-0.5 after:h-0.75 dark:after:bg-foreground after:w-full after:content-[' ']">
                     <h5 className="font-500 text-300">Reservar</h5>
-                    <p className="text-300 font-600">{Object.is(totalPriceRes, NaN) ? "S/ --" : formatPrice(totalPriceRes)}</p>
+                    <p className="text-300 font-600">{Object.is(totalPriceRes, NaN) ? "S/ --" : formatPrice(totalPriceRes)+".00"}</p>
                 </div>
 
                 {/* Aviso de temporada activa */}
@@ -378,7 +386,7 @@ const Reservation = ({ room }: ReservationProps) => {
                         <Label className="mb-2 block">Check In</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button type="button" variant={'outline'} className={cn('w-full justify-start overflow-hidden text-left font-normal bg-foreground/5 hover:bg-background border-foreground/20 text-background dark:text-foreground', !bookingData.checkIn && 'text-background dark:text-foreground')}>
+                                <Button type="button" variant={'outline'} className="w-full justify-start overflow-hidden text-left font-normal bg-foreground border-background text-background hover:bg-background">
                                     {bookingData.checkIn ? format(bookingData.checkIn, 'PPP') : 'Elige una fecha'}
                                 </Button>
                             </PopoverTrigger>
@@ -398,10 +406,10 @@ const Reservation = ({ room }: ReservationProps) => {
                     </div>
 
                     <div>
-                        <Label className="mb-2">Check Out</Label>
+                        <Label className="mb-2 block">Check Out</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button type="button" variant={'outline'} className={cn('w-full justify-start overflow-hidden text-left font-normal bg-foreground/5 hover:bg-background border-foreground/20 text-background dark:text-foreground', !bookingData.checkOut && 'text-background dark:text-foreground')}>
+                                <Button type="button" variant={'outline'} className="w-full justify-start overflow-hidden text-left font-normal bg-foreground border-background text-background hover:bg-background">
                                     {bookingData.checkOut ? format(bookingData.checkOut, 'PPP') : 'Elige una fecha'}
                                 </Button>
                             </PopoverTrigger>
@@ -418,17 +426,66 @@ const Reservation = ({ room }: ReservationProps) => {
 
                     <div className="flex flex-col gap-2">
                         <Label>Adultos</Label>
-                        <Input type='number' name='adults' className='bg-foreground/5 border-foreground/20'
-                            max={(room.capacity ?? 0) - bookingData.children} min={1} value={bookingData.adults} onChange={handleNumberChange} />
+                        <div className="flex items-center justify-between gap-3 border-2 border-background">
+                            <button
+                                type="button"
+                                onClick={() => handleNumberChange({ target: { name: 'adults', value: String(bookingData.adults - 1) } })}
+                                disabled={bookingData.adults <= 1}
+                                className="flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                            >
+                                −
+                            </button>
+                            <span className="w-6 text-center font-medium">{bookingData.adults}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleNumberChange({ target: { name: 'adults', value: String(bookingData.adults + 1) } })}
+                                disabled={bookingData.adults >= (room.capacity ?? 0) - bookingData.children}
+                                className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-foreground/20 bg-foreground/5 text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
 
                     <div className="flex flex-col gap-2">
                         <Label>Niños</Label>
-                        <Input type='number' name='children' className='bg-foreground/5 border-foreground/20'
-                            max={(room.capacity ?? 0) - bookingData.adults} min={0} value={bookingData.children} onChange={handleNumberChange} />
+                        <div className="flex items-center justify-between gap-3 border-2 border-background">
+                            <button
+                                type="button"
+                                onClick={() => handleNumberChange({ target: { name: 'children', value: String(bookingData.children - 1) } })}
+                                disabled={bookingData.children <= 0}
+                                className="flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                            >
+                                −
+                            </button>
+                            <span className="w-6 text-center font-medium">{bookingData.children}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleNumberChange({ target: { name: 'children', value: String(bookingData.children + 1) } })}
+                                disabled={bookingData.children >= (room.capacity ?? 0) - bookingData.adults}
+                                className="flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
 
-                    <Button type="submit" variant={'outline'} className="mt-8 w-full bg-foreground/5 hover:bg-background border-foreground/20 text-background dark:text-foreground md:col-start-1 md:col-end-3">Reservar</Button>
+                    <div className="mt-8 w-full text-center bg-foreground text-background border-2 border-background hover:bg-background hover:text-foreground md:col-start-1 md:col-end-3 transition-all">
+                        <a
+                            href={`https://wa.me/51923381810?text=${encodeURIComponent(
+                                `Hola, me gustaría reservar la habitación *${room.name}*:\n\n` +
+                                `Check In: ${bookingData.checkIn ? format(bookingData.checkIn, 'PPP') : 'No seleccionado'}\n` +
+                                `Check Out: ${bookingData.checkOut ? format(bookingData.checkOut, 'PPP') : 'No seleccionado'}\n` +
+                                `Adultos: ${bookingData.adults}\n` +
+                                `Niños: ${bookingData.children}\n\n` +
+                                `Cotización: S/${totalPriceRes}.00`
+                            )}`}
+                            target="_blank"
+                        >
+                            Reservar por WhatsApp
+                        </a>
+                    </div>
+                    
                 </form>
             </div>
         </section>
