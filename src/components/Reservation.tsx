@@ -340,9 +340,6 @@ const Reservation = ({ room }: ReservationProps) => {
     const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        toast.error('Página web en mantenimiento. Reservas al +51 923 381 810.');
-        return;
-
         if (!userId) {
             toast.error('Iniciar sesión antes de reservar.');
             return;
@@ -364,29 +361,29 @@ const Reservation = ({ room }: ReservationProps) => {
 
     return (
         <section className="mt-10 md:mt-0">
-            <div className="bg-foreground text-background dark:text-foreground px-6 pt-8 pb-6">
-                <div className="relative mb-4 flex items-center justify-between after:bg-background after:absolute after:-bottom-0.5 after:h-0.75 dark:after:bg-foreground after:w-full after:content-[' ']">
-                    <h5 className="font-500 text-300">Reservar</h5>
-                    <p className="text-300 font-600">{Object.is(totalPriceRes, NaN) ? "S/ --" : formatPrice(totalPriceRes)+".00"}</p>
+            <div className="bg-foreground text-background dark:text-background px-6 pt-8 pb-6">
+                <div className="relative mb-4 flex items-center justify-between after:bg-background after:absolute after:-bottom-0.5 after:h-0.5 dark:after:foreground after:w-full after:content-[' ']">
+                    <h5 className="dark:text-background font-500 text-300">Reservar</h5>
+                    <p className="dark:text-background text-300 font-600">{Object.is(totalPriceRes, NaN) ? "S/ --" : formatPrice(totalPriceRes)+".00"}</p>
                 </div>
 
                 {/* Aviso de temporada activa */}
                 {activeSeason && (
-                    <div className="mb-4 px-3 py-2 bg-background/10 rounded text-sm border border-background/20">
-                        Precio de temporada: <span className="font-600">{activeSeason}</span>
+                    <div className="mb-4 px-3 py-2 bg-background/10 text-sm border border-background">
+                        Precio de temporada: <span className="dark:text-background font-600">{activeSeason}</span>
                     </div>
                 )}
 
-                <p className="mb-0">· Los horarios de check-in y check-out son flexibles, contáctenos para coordinar.</p>
-                <p className="mb-0">· La categoría "Niños" aplica para edades de 2 a 10 años.</p>
-                <p className="mb-6">· Los bebés menores de 2 años se alojan gratuitamente.</p>
+                <p className="dark:text-background mb-0">· Los horarios de check-in y check-out son flexibles, contáctenos para coordinar.</p>
+                <p className="dark:text-background mb-0">· La categoría "Niños" aplica para edades de 2 a 10 años.</p>
+                <p className="dark:text-background mb-6">· Los bebés menores de 2 años se alojan gratuitamente.</p>
 
                 <form onSubmit={handleSubmit} className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 mb-6">
                     <div>
                         <Label className="mb-2 block">Check In</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button type="button" variant={'outline'} className="w-full justify-start overflow-hidden text-left font-normal bg-foreground border-background text-background hover:bg-background">
+                                <Button type="button" variant={'outline'} className="dark:border-background w-full justify-start overflow-hidden text-left font-normal bg-foreground border-background text-background hover:bg-background">
                                     {bookingData.checkIn ? format(bookingData.checkIn, 'PPP') : 'Elige una fecha'}
                                 </Button>
                             </PopoverTrigger>
@@ -409,7 +406,7 @@ const Reservation = ({ room }: ReservationProps) => {
                         <Label className="mb-2 block">Check Out</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button type="button" variant={'outline'} className="w-full justify-start overflow-hidden text-left font-normal bg-foreground border-background text-background hover:bg-background">
+                                <Button type="button" variant={'outline'} className="dark:border-background w-full justify-start overflow-hidden text-left font-normal bg-foreground border-background text-background hover:bg-background">
                                     {bookingData.checkOut ? format(bookingData.checkOut, 'PPP') : 'Elige una fecha'}
                                 </Button>
                             </PopoverTrigger>
@@ -431,16 +428,16 @@ const Reservation = ({ room }: ReservationProps) => {
                                 type="button"
                                 onClick={() => handleNumberChange({ target: { name: 'adults', value: String(bookingData.adults - 1) } })}
                                 disabled={bookingData.adults <= 1}
-                                className="flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                                className="dark:text-background flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
                             >
                                 −
                             </button>
-                            <span className="w-6 text-center font-medium">{bookingData.adults}</span>
+                            <span className="dark:text-background w-6 text-center font-medium">{bookingData.adults}</span>
                             <button
                                 type="button"
                                 onClick={() => handleNumberChange({ target: { name: 'adults', value: String(bookingData.adults + 1) } })}
                                 disabled={bookingData.adults >= (room.capacity ?? 0) - bookingData.children}
-                                className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-foreground/20 bg-foreground/5 text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                                className="dark:text-background flex items-center justify-center w-8 h-8 rounded-full border-2 border-foreground/20 bg-foreground/5 text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
                             >
                                 +
                             </button>
@@ -454,16 +451,16 @@ const Reservation = ({ room }: ReservationProps) => {
                                 type="button"
                                 onClick={() => handleNumberChange({ target: { name: 'children', value: String(bookingData.children - 1) } })}
                                 disabled={bookingData.children <= 0}
-                                className="flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                                className="dark:text-background flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
                             >
                                 −
                             </button>
-                            <span className="w-6 text-center font-medium">{bookingData.children}</span>
+                            <span className="dark:text-background w-6 text-center font-medium">{bookingData.children}</span>
                             <button
                                 type="button"
                                 onClick={() => handleNumberChange({ target: { name: 'children', value: String(bookingData.children + 1) } })}
                                 disabled={bookingData.children >= (room.capacity ?? 0) - bookingData.adults}
-                                className="flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
+                                className="dark:text-background flex items-center justify-center w-8 h-8 border-background text-lg font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/10 transition-colors"
                             >
                                 +
                             </button>

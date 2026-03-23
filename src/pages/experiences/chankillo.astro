@@ -1,59 +1,43 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { Image } from "astro:assets";
-
-
-import chankillo1 from '../../assets/chankillo-patrimonio-mundial.jpg'
-import chankillo2 from '../../assets/Chanquillo_Fortaleza_(remains).jpg'
-import chankillo3 from '../../assets/chankillo.jpg'
-import chankillo4 from '../../assets/Las_trece_torres_del_observatorio_astronomico_de_Chanquillo.jpg'
-
 ---
 
 <Layout title="Actividades Cercanas">
     <div class="container pt-15">
         <div class="mb-8 text-center">
             <h1 class="text-400 font-600 mb-4">Chankillo</h1>
-            <p class="text-muted-foreground">Descubre todo lo que puedes hacer cerca de nuestro hotel</p>
         </div>
 
         <div class="mb-12">
             <div>
-                <Image 
+                <img 
                     id="mainImage"
                     class="h-125 object-cover w-full cursor-zoom-in" 
-                    src= {chankillo1}
+                    src= '/assets/chankillo-1.jpg'
                     alt="Actividad principal"
                 />
             </div>
             
             <div class="mt-4 flex items-center justify-center gap-0.5 overflow-x-auto pb-2">
                 <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="main">
-                    <Image 
+                    <img 
                         class="h-full w-full object-cover" 
-                        src= {chankillo1}
+                        src= '/assets/chankillo-1.jpg'
                         alt="Actividad principal"
                     />
                 </div>
                 <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="0">
-                    <Image 
+                    <img 
                         class="h-full w-full object-cover" 
-                        src= {chankillo2}
+                        src= '/assets/chankillo-2.jpg'
                         alt="Actividad 1"
                     />
                 </div>
                 <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="1">
-                    <Image 
+                    <img 
                         class="h-full w-full object-cover" 
-                        src= {chankillo3}
+                        src= '/assets/chankillo-3.jpg'
                         alt="Actividad 2"
-                    />
-                </div>
-                <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="2">
-                    <Image 
-                        class="h-full w-full object-cover" 
-                        src= {chankillo4}
-                        alt="Actividad 3"
                     />
                 </div>
 

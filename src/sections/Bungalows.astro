@@ -1,8 +1,5 @@
 ---
 import BungalowCard from '@/components/BungalowCard.astro'
-import bungalow1 from '../assets/IMG_4035.png'
-import bungalow2 from '../assets/IMG_3985.png'
-import bungalow3 from '../assets/IMG_3967.png'
 ---
 
 
@@ -14,9 +11,9 @@ import bungalow3 from '../assets/IMG_3967.png'
         </div>
 
         <div class="md:grid md:gap-9 md:grid-cols-2 lg:grid-cols-3">
-            <BungalowCard name="Suites" image={bungalow2} url="/suites" />
-            <BungalowCard name="Standard" image={bungalow3} url="/standard" />
-            <BungalowCard name="Todos" image={bungalow1} url="/all" />
+            <BungalowCard name="Suites" image='/assets/suites-thumb.png' url="/suites" />
+            <BungalowCard name="Standard" image='/assets/standard-thumb.png' url="/standard" />
+            <BungalowCard name="Todos" image='/assets/all-thumb.png's url="/all" />
         </div>
     </div>
 </section>

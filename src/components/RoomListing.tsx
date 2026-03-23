@@ -25,9 +25,7 @@ const RoomListing = ({room}:{room: Room}) => {
           src={urlForImage(room.image).url()}
           alt={room.name}
           className="max-h-full max-w-full transition-all duration-300 ease-in-out
-                    group-hover:scale-110
-                    group-hover:drop-shadow-[7px_7px_0_rgba(177,146,112,0.85)]
-                    dark:group-hover:drop-shadow-[7px_7px_0_rgba(177,146,112,0.85)]"
+                    group-hover:scale-110"
         />
       </a>
     </div>
