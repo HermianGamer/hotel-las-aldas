@@ -1,0 +1,8 @@
+{
+  "name": "hotel-las-aldas",
+  "compatibility_date": "2026-03-23",
+  "main": "./dist/_worker.js/index.js",
+  "assets": {
+    "directory": "./dist"
+  }
+}
