@@ -84,7 +84,7 @@ if (!room) {
                         <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index={index}>
                             <img class="h-full w-full object-cover"
                                 src={urlFor(thumbnail).url()}
-                                alt={`${room.name} - thumbnail ${index + 1}`}
+                                alt={`${room.name} - thumbnail ${index}`}
                             />
                         </div>
                     ))}
@@ -95,12 +95,12 @@ if (!room) {
         <div class="mt-16 md:grid md:grid-cols-2 md:gap-8">
             <div>
                 <div class="mb-8">
-                    <h3 class="text-300 font-600 mb-4">Description</h3>
-                    <p>{room.description}</p>
+                    <h3 class="text-300 font-600 mb-4">Descripción</h3>
+                    <p class="text-justify">{room.description}</p>
                 </div>
 
                 <div>
-                    <h3 class="text-300 font-600 mb-4">Room Amenities</h3>
+                    <h3 class="text-300 font-600 mb-4">Amenidades</h3>
                     <div class="mb-8 grid grid-cols-2 gap-4">
                         {room.amenities?.map((amenity: any) => (
                             <div class="flex items-center gap-4">
@@ -251,18 +251,15 @@ if (!room) {
 
         let currentIndex = 0;
 
-        // ── Thumbnail click → update main image ───────────────────────
-        thumbnails.forEach((thumb) => {
-            thumb.addEventListener('click', () => {
-                const idx = parseInt(thumb.getAttribute('data-index') || '0', 10);
-                currentIndex = idx;
-                thumbnails.forEach(t => t.classList.remove('border-foreground'));
-                thumb.classList.add('border-foreground');
-                if (mainImage && images[idx]) {
-                    mainImage.setAttribute('src', images[idx].src);
-                    mainImage.setAttribute('data-index', String(idx));
-                }
-            });
+        // ── Thumbnail click ────────────────────────────────────────────
+        thumbnails.forEach((thumb, i) => {
+        thumb.addEventListener('click', () => {
+            currentIndex = i; // usa 'i' del forEach, no data-index
+            if (mainImage) {
+            mainImage.src = images[i].src;
+            mainImage.alt = images[i].alt;
+            }
+        });
         });
 
         // ── Open lightbox ─────────────────────────────────────────────

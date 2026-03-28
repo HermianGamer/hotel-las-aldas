@@ -1,12 +1,10 @@
 import type { Room } from "@/lib/types";
 import { urlForImage } from "@/lib/url-for-image";
-import { Users } from "lucide-react";
-
 
 const RoomListing = ({room}:{room: Room}) => {
   return (
   //  Entire Card
-  <div className="group p-8 md:mb-0 overflow-visible">
+  <div className="group p-4 mb-4 overflow-visible bg-primary text-background">
 
     {/* Specs */}
     <div className="grid grid-cols-2">
@@ -19,19 +17,19 @@ const RoomListing = ({room}:{room: Room}) => {
     </div>
 
     {/* Image */}
-    <div className="relative h-65 flex items-center justify-center overflow-visible">
+    <div className="relative max-h-85 flex items-center justify-center overflow-visible">
       <a href={`/room/${room.slug}`} className="block">
         <img
           src={urlForImage(room.image).url()}
           alt={room.name}
           className="max-h-full max-w-full transition-all duration-300 ease-in-out
-                    group-hover:scale-110"
+                    group-hover:scale-105"
         />
       </a>
     </div>
 
     {/* Name*/}
-    <div className="relative p-4">
+    <div className="relative p-0">
       <a href={`/room/${room.slug}`}>
         <h2 className="text-300 font-700 text-center">{room.name}</h2>
       </a>

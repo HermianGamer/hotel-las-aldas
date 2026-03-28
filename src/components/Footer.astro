@@ -1,5 +1,7 @@
 ---
 import { Button } from "./ui/button.tsx";
+
+import { FaInstagram, FaSquareFacebook, FaSquareTwitter, FaTiktok } from "react-icons/fa6";
 ---
 
 
@@ -11,30 +13,30 @@ import { Button } from "./ui/button.tsx";
             <div class="mb-8 md:mb-0">
                 <h3 class="uppercase text-300 font-500 mb-2">Las Aldas</h3>
 
-                <p class="mb-6">El Hotel Las Aldas se alza frente al mar Casmeño como un refugio de calma.
-                    Un espacio para quienes valoran el descanso, la contemplación y la belleza del litoral peruano.
-                </p>
-
-                <p class="mb-6">Contacto por correo: info@lasaldas.com
-                </p>
+                <div class="flex mb-2 gap-6 md:gap-2">
+                    <a href="https://www.instagram.com/hotel_las_aldas/" target="_blank"> <FaInstagram />     </a>
+                    <a href="https://www.facebook.com/HotelLasAldas/" target="_blank">    <FaSquareFacebook/> </a>
+                    <a href="https://x.com/HotelLasAldas" target="_blank">                <FaSquareTwitter/>  </a>
+                    <a href="https://www.tiktok.com/@hotel_las_aldas" target="_blank">    <FaTiktok/>         </a>
+                </div>
 
                 <a href="/all" class="hover:text-primary transition-colors duration-300 ease-in-out">
                     <Button variant="secondary" className="uppercase font-600">Reservar</Button>
                 </a>
-        </div>
+            </div>
 
             <!-- Col. 2: Quick Menu -->
             <div class="mb-8 md:mb-0 md:justify-self-end lg:translate-x-12">
                 <h3 class="uppercase text-300 font-500 mb-2">Menú</h3>
                 <ul class="list-none">
                     <li class="mb-2">
-                        <a href="/all" class="hover:text-primary transitions-colors duration-300 ease">Bungalows</a>
+                        <a href="/all" class="hover:text-background/50 transitions-colors duration-300 ease">Bungalows</a>
                     </li>
                     <li class="mb-2">
-                        <a href="/#experiences" class="hover:text-primary transitions-colors duration-300 ease">Experiencias</a>
+                        <a href="/#experiences" class="hover:text-background/50 transitions-colors duration-300 ease">Experiencias</a>
                     </li>
                     <li>
-                        <a href="https://wa.me/51923381810" target="_blank" class="hover:text-primary transitions-colors duration-300 ease">Contacto</a>
+                        <a href="https://wa.me/51923381810" target="_blank" class="hover:text-background/50 transitions-colors duration-300 ease">Contacto</a>
                     </li>
                 </ul>
             </div>
@@ -44,16 +46,19 @@ import { Button } from "./ui/button.tsx";
                 <h3 class="uppercase text-300 font-500 mb-2">Más Enlaces</h3>
                 <ul class="list-none">
                     <li class="mb-2">
-                        <a href="/complaint" class="flex items-center gap-2 hover:text-primary transitions-colors duration-300 ease">
+                        <a href="/complaint" class="flex items-center gap-2 hover:text-background/50 transitions-colors duration-300 ease">
                             <img src='/assets/reclamaciones.png' class="h-8 w-13" alt="reclamaciones"/>
                             <p>Libro de Reclamaciones</p>
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="/terms" class="hover:text-primary transitions-colors duration-300 ease">Términos y condiciones</a>
+                        <a href="/terms" class="hover:text-background/50 transitions-colors duration-300 ease">Términos y condiciones</a>
                     </li>
                     <li class="mb-2">
-                        <a href="/policies" class="hover:text-primary transitions-colors duration-300 ease">Política de cambios y/o devoluciones</a>
+                        <a href="/policies" class="hover:text-background/50 transitions-colors duration-300 ease">Política de cambios y/o devoluciones</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="https://compactdisc.pixieset.com/hotellasaldas/recepcion/" target="_blank" class="hover:text-background/50 transitions-colors duration-300 ease">Galería</a>
                     </li>
                 </ul>
             </div>

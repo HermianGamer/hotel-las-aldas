@@ -47,11 +47,11 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
             // Home page: fixed, con efecto de scroll
             return (
                 <div className="uppercase font-600 text-sm md:text-base">
-                    <ul>
-                        <li className="inline-block md:mr-4 mr-2 align-middle"><a href="/all">Bungalows</a></li>
+                    <ul className="flex items-center">
+                        <li className="mr-2 md:mr-4"><a href="/all">Bungalows</a></li>
                         <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="/#experiences">Experiencias</a></li>
-                        <li className="inline-block md:mr-4 mr-2 align-middle"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
-                        <li className="inline-block md:mr-4 mr-2 align-middle"><Login /></li>
+                        <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
+                        <li className="inline-flex items-center"><Login /></li>
                         <SignedIn>
                             <li className="inline-block align-middle"><Dashboard /></li>
                         </SignedIn>
@@ -62,10 +62,11 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
             // Otras páginas: sticky, siempre con fondo
             return (
                 <div className="uppercase font-600 text-sm md:text-base">
-                    <ul>
-                        <li className="inline-block md:mr-4 mr-2"><a href="/">Inicio</a></li>
-                        <li className="inline-block md:mr-4 mr-2"><a href="/all">Bungalows</a></li>
-                        <li className="inline-block md:mr-4 mr-2"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
+                    <ul className="flex items-center">
+                        <li className="mr-2 md:mr-4"><a href="/">Inicio</a></li>
+                        <li className="md:inline-block md:mr-4 mr-2 align-middle"><a href="/all">Bungalows</a></li>
+                        <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="/#experiences">Experiencias</a></li>
+                        <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
                         <li className="inline-flex items-center"><Login /></li>
                         <SignedIn>
                             <li className="inline-block align-middle"><Dashboard /></li>
