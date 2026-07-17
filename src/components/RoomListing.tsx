@@ -20,8 +20,14 @@ const RoomListing = ({room}:{room: Room}) => {
     <div className="relative max-h-85 flex items-center justify-center overflow-visible">
       <a href={`/room/${room.slug}`} className="block">
         <img
-          src={urlForImage(room.image).url()}
+          src={urlForImage(room.image).width(800).quality(75).auto('format').url()}
+          srcSet={[400, 800, 1200]
+            .map(w => `${urlForImage(room.image).width(w).quality(75).auto('format').url()} ${w}w`)
+            .join(', ')}
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           alt={room.name}
+          loading="lazy"
+          decoding="async"
           className="max-h-full max-w-full transition-all duration-300 ease-in-out
                     group-hover:scale-105"
         />

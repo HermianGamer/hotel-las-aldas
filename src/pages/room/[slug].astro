@@ -67,8 +67,9 @@ if (!room) {
         <div>
             <div>
                 <img id="mainImage" class="h-125 object-cover w-full cursor-zoom-in"
-                    src={urlFor(room.imageInterior).url()}
+                    src={urlFor(room.imageInterior).width(1600).quality(75).auto('format').url()}
                     alt={room.name ?? ''}
+                    fetchpriority="high"
                 />
             </div>
 
@@ -76,15 +77,21 @@ if (!room) {
                 <div class="mt-4 flex items-center justify-center gap-0.5 overflow-x-auto pb-2">
                     <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index="main">
                         <img class="h-full w-full object-cover"
-                            src={urlFor(room.imageInterior).url()}
+                            src={urlFor(room.imageInterior).width(160).height(160).fit('crop').quality(60).auto('format').url()}
+                            data-full={urlFor(room.imageInterior).width(1600).quality(75).auto('format').url()}
                             alt={`${room.name} - main`}
+                            loading="lazy"
+                            decoding="async"
                         />
                     </div>
                     {room.thumbnails.map((thumbnail: any, index: number) => (
                         <div class="thumbnail-item size-20 cursor-pointer overflow-hidden border hover:border-foreground" data-index={index}>
                             <img class="h-full w-full object-cover"
-                                src={urlFor(thumbnail).url()}
+                                src={urlFor(thumbnail).width(160).height(160).fit('crop').quality(60).auto('format').url()}
+                                data-full={urlFor(thumbnail).width(1600).quality(75).auto('format').url()}
                                 alt={`${room.name} - thumbnail ${index}`}
+                                loading="lazy"
+                                decoding="async"
                             />
                         </div>
                     ))}
@@ -246,7 +253,7 @@ if (!room) {
         const images: { src: string; alt: string }[] = [];
         thumbnails.forEach((thumb) => {
             const img = thumb.querySelector('img');
-            if (img) images.push({ src: img.getAttribute('src') || '', alt: img.alt });
+            if (img) images.push({ src: img.getAttribute('data-full') || img.getAttribute('src') || '', alt: img.alt });
         });
 
         let currentIndex = 0;

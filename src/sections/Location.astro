@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import mapa from "@/assets/mapa.jpg";
 ---
 
 
@@ -48,7 +50,15 @@
                 target="_blank"
                 aria-label="Ver Hotel Las Aldas en Google Maps"
                 >
-                    <img class="h-full w-full object-cover cursor-help transition-transform duration-300 ease-in-out hover:scale-105" src='/assets/mapa.jpg' alt="Ubicación Hotel Las Aldas en Google Maps"/>
+                    <Image
+                        class="h-full w-full object-cover cursor-help transition-transform duration-300 ease-in-out hover:scale-105"
+                        src={mapa}
+                        width={900}
+                        height={600}
+                        loading="lazy"
+                        decoding="async"
+                        alt="Ubicación Hotel Las Aldas en Google Maps"
+                    />
                 </a>
              </div>
         </div>

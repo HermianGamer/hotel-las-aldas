@@ -1,5 +1,9 @@
 ---
 import AmenitiesCard from "@/components/AmenitiesCard.astro";
+import chankilloThumb from "@/assets/thumbnails/chankillo-thumb.jpg";
+import matrimonioThumb from "@/assets/thumbnails/matrimonio-thumb.jpg";
+import huaroThumb from "@/assets/thumbnails/huaro-thumb.jpg";
+import aldasThumb from "@/assets/thumbnails/aldas-thumb.jpg";
 ---
 
 
@@ -10,10 +14,10 @@ import AmenitiesCard from "@/components/AmenitiesCard.astro";
         </div>
 
         <div class="space-y-6 md:space-y-0 md:grid md:grid-cols-2 md:gap-12 lg:grid-cols-4 items-center">
-            <AmenitiesCard name="Chankillo" image='/assets/chankillo-thumb.jpg' url='/experiences/chankillo'/>
-            <AmenitiesCard name="Matrimonios" image='/assets/matrimonio-thumb.jpg' url='/experiences/matrimonio'/>
-            <AmenitiesCard name="El Huaro" image='/assets/huaro-thumb.jpg' url='/experiences/huaro'/>
-            <AmenitiesCard name="Las Aldas (Ruinas)" image='/assets/aldas-thumb.jpg' url='/experiences/aldas'/>
+            <AmenitiesCard name="Chankillo" image={chankilloThumb} url='/experiences/chankillo'/>
+            <AmenitiesCard name="Matrimonios" image={matrimonioThumb} url='/experiences/matrimonio'/>
+            <AmenitiesCard name="El Huaro" image={huaroThumb} url='/experiences/huaro'/>
+            <AmenitiesCard name="Las Aldas (Ruinas)" image={aldasThumb} url='/experiences/aldas'/>
         </div>
     </div>
 </section>

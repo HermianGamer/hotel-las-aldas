@@ -1,10 +1,94 @@
+---
+import { Image } from "astro:assets";
+import uno from "@/assets/instagram/uno.jpg";
+import dos from "@/assets/instagram/dos.jpg";
+import tres from "@/assets/instagram/tres.jpg";
+import cuatro from "@/assets/instagram/cuatro.jpg";
+import cinco from "@/assets/instagram/cinco.jpg";
+import seis from "@/assets/instagram/seis.jpg";
+import siete from "@/assets/instagram/siete.jpg";
+import ocho from "@/assets/instagram/ocho.jpg";
+import nueve from "@/assets/instagram/nueve.jpg";
+import diez from "@/assets/instagram/diez.jpg";
+import once from "@/assets/instagram/once.jpg";
+
+const posts = [
+    { img: uno, href: "https://www.instagram.com/p/B8zOWfXhHDR/" },
+    { img: dos, href: "https://www.instagram.com/p/CszUn5VO_4R/" },
+    { img: tres, href: "https://www.instagram.com/p/Cs9-j93tHwy/" },
+    { img: cuatro, href: "https://www.instagram.com/p/CtSjr1MJwiC/" },
+    { img: cinco, href: "https://www.instagram.com/p/CuFysZ8pNco/" },
+    { img: seis, href: "https://www.instagram.com/p/CvGb4NZtdYf/" },
+    { img: siete, href: "https://www.instagram.com/p/C7-JdhyJnkw/" },
+    { img: ocho, href: "https://www.instagram.com/p/C8RwOA4oTeU/" },
+    { img: nueve, href: "https://www.instagram.com/p/DAbh_2ovZhg/" },
+    { img: diez, href: "https://www.instagram.com/p/DO3tbybDmwg/" },
+    { img: once, href: "https://www.instagram.com/p/DXcGQBTjoV0/" },
+];
+
+// Duplicado para que la animación pueda hacer loop infinito sin salto visible
+const track = [...posts, ...posts];
+---
+
 <section class="my-28 feed">
     <div class="container text-center mb-8">
-        <a class="text-500 font-bold md:text-600" href="https://www.instagram.com/hotel_las_aldas/" target="_blank">Síguenos en Instagram</a>
-
+        <a class="text-500 font-bold md:text-600" href="https://www.instagram.com/hotel_las_aldas/" target="_blank" rel="noopener noreferrer">Síguenos en Instagram</a>
     </div>
 
-    <div>
-        <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/7e7c2182537853bea340bf9cedf5de67.html" scrolling="yes" allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;"></iframe>
+    <div class="ig-viewport">
+        <div class="ig-track">
+            {track.map((post, i) => (
+                <a
+                    href={post.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group block shrink-0 overflow-hidden"
+                    aria-hidden={i >= posts.length ? "true" : undefined}
+                    tabindex={i >= posts.length ? -1 : undefined}
+                >
+                    <Image
+                        src={post.img}
+                        width={320}
+                        height={320}
+                        loading={i < 4 ? "eager" : "lazy"}
+                        decoding="async"
+                        alt="Publicación de Instagram de Hotel Las Aldas"
+                        class="h-80 w-80 object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+                    />
+                </a>
+            ))}
+        </div>
     </div>
-    </section>
+</section>
+
+<style>
+    .ig-viewport {
+        overflow: hidden;
+    }
+
+    .ig-track {
+        display: flex;
+        gap: 1rem;
+        width: max-content;
+        animation: ig-scroll 90s linear infinite;
+    }
+
+    .ig-viewport:hover .ig-track {
+        animation-play-state: paused;
+    }
+
+    @keyframes ig-scroll {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ig-track {
+            animation: none;
+        }
+    }
+</style>

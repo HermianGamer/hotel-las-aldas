@@ -22,7 +22,7 @@ const rooms = await sanityClient.fetch<Room[]>(
     <div class="container pt-28">
         <div class="md:grid md:gap-9 md:grid-cols-2 lg:grid-cols-3">
             {rooms.map(room => (
-                <RoomListing room={room} client:load />
+                <RoomListing room={room} />
             ))}
         </div>
     </div>
