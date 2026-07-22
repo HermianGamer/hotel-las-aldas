@@ -1,14 +1,14 @@
 ---
 import { Image } from "astro:assets";
 
-const {name, image, url} = Astro.props;
+const {name, image, url, alt} = Astro.props;
 ---
 <div class="group p-8 md:mb-0 overflow-visible">
     <div class="relative h-65 flex items-center justify-center overflow-visible">
         <a class="block" href={url}>
             <Image
                 src={image}
-                alt={name}
+                alt={alt ?? name}
                 width={553}
                 height={369}
                 loading="lazy"

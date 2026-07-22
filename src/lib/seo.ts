@@ -67,3 +67,55 @@ export function buildHotelSchema() {
 		],
 	};
 }
+
+export function buildBreadcrumbSchema(items: { name: string; path: string }[]) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: items.map((item, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			name: item.name,
+			item: `${SITE_URL}${item.path}`,
+		})),
+	};
+}
+
+export function buildHotelRoomSchema(room: {
+	name: string;
+	slug: string;
+	description?: string;
+	capacity?: number;
+	price?: number;
+	image?: string;
+	amenities?: { name: string }[];
+}) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'HotelRoom',
+		name: room.name,
+		description: room.description,
+		url: `${SITE_URL}/room/${room.slug}`,
+		occupancy: room.capacity
+			? { '@type': 'QuantitativeValue', maxValue: room.capacity }
+			: undefined,
+		image: room.image ? [room.image] : undefined,
+		amenityFeature: room.amenities?.map((amenity) => ({
+			'@type': 'LocationFeatureSpecification',
+			name: amenity.name,
+			value: true,
+		})),
+		...(room.price
+			? {
+					offers: {
+						'@type': 'Offer',
+						price: room.price,
+						priceCurrency: 'PEN',
+						availability: 'https://schema.org/InStock',
+						url: `${SITE_URL}/room/${room.slug}`,
+					},
+				}
+			: {}),
+		containedInPlace: { '@id': `${SITE_URL}/#hotel` },
+	};
+}

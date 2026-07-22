@@ -1,14 +1,23 @@
 ---
+export const prerender = true;
+
 import Layout from "@/layouts/Layout.astro";
 import AmenitiesCard from "@/components/AmenitiesCard.astro";
 import chankilloThumb from "@/assets/thumbnails/chankillo-thumb.jpg";
 import huaroThumb from "@/assets/thumbnails/huaro-thumb.jpg";
 import aldasThumb from "@/assets/thumbnails/aldas-thumb.jpg";
+import { buildBreadcrumbSchema } from "@/lib/seo";
+
+const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Destinos', path: '/destinos' },
+]);
 ---
 
 <Layout
     title="Playas y Destinos en Áncash"
     description="Descubre las playas y destinos turísticos cerca de Hotel Las Aldas: la playa virgen de la Ruta El Huaro, el complejo arqueológico Las Aldas y el observatorio solar de Chankillo, en Casma, Áncash, Perú."
+    schema={breadcrumbSchema}
 >
     <div class="container pt-15">
         <div class="mb-8 text-center">

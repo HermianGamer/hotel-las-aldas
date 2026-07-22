@@ -1,10 +1,20 @@
 ---
+export const prerender = true;
+
 import Layout from "@/layouts/Layout.astro";
+import { buildBreadcrumbSchema } from "@/lib/seo";
+
+const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Destinos', path: '/destinos' },
+    { name: 'El Huaro', path: '/experiences/huaro' },
+]);
 ---
 
 <Layout
     title="Ruta El Huaro y Avistamiento de Lobos Marinos"
     description="Recorre la Ruta El Huaro, a 20 minutos de Hotel Las Aldas: dunas, playa virgen y avistamiento de lobos marinos en la costa de Casma, Áncash, Perú."
+    schema={breadcrumbSchema}
 >
     <div class="container pt-15">
         <div class="mb-8 text-center">

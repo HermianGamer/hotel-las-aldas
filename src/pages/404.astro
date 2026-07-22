@@ -1,0 +1,31 @@
+---
+export const prerender = true;
+
+import Layout from "@/layouts/Layout.astro";
+
+Astro.response.status = 404;
+Astro.response.statusText = "Not Found";
+---
+
+<Layout
+    title="Página no encontrada"
+    description="La página que buscas no existe o fue movida. Explora los bungalows, destinos y experiencias de Hotel Las Aldas en Áncash, Perú."
+    noindex={true}
+>
+    <div class="container pt-15 pb-20 text-center">
+        <div class="mb-8">
+            <h1 class="text-400 font-600 mb-4">Página no encontrada</h1>
+            <p class="text-muted-foreground max-w-xl mx-auto">
+                La página que buscas no existe o fue movida. Prueba con alguno de estos enlaces:
+            </p>
+        </div>
+
+        <ul class="flex flex-wrap justify-center gap-x-8 gap-y-2 mt-8">
+            <li><a href="/" class="underline underline-offset-2 hover:text-primary">Inicio</a></li>
+            <li><a href="/all" class="underline underline-offset-2 hover:text-primary">Bungalows</a></li>
+            <li><a href="/destinos" class="underline underline-offset-2 hover:text-primary">Playas y Destinos en Áncash</a></li>
+            <li><a href="/faq" class="underline underline-offset-2 hover:text-primary">Preguntas Frecuentes</a></li>
+            <li><a href="/about" class="underline underline-offset-2 hover:text-primary">Sobre Nosotros</a></li>
+        </ul>
+    </div>
+</Layout>

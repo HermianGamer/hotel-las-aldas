@@ -1,10 +1,20 @@
 ---
+export const prerender = true;
+
 import Layout from "@/layouts/Layout.astro";
+import { buildBreadcrumbSchema } from "@/lib/seo";
+
+const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Destinos', path: '/destinos' },
+    { name: 'Las Aldas', path: '/experiences/aldas' },
+]);
 ---
 
 <Layout
     title="Complejo Arqueológico Las Aldas"
     description="Visita el complejo arqueológico Las Aldas, a pocos metros de tu bungalow: una pirámide trunca frente al mar y uno de los sitios ceremoniales más antiguos de la costa de Áncash, Perú."
+    schema={breadcrumbSchema}
 >
     <div class="container pt-15">
         <div class="mb-8 text-center">

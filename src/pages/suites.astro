@@ -4,21 +4,29 @@ import Layout from "@/layouts/Layout.astro";
 import RoomListing from '@/components/RoomListing';
 import { sanityClient } from "sanity:client";
 import type { Room } from "sanity.types";
+import { buildBreadcrumbSchema } from "@/lib/seo";
 
 const rooms = await sanityClient.fetch<Room[]>(
     `*[_type == "room" && category == "suite" && isAvailable]
     {"slug": slug.current, name, description, category, capacity, image, price, discount, thumbnailImgs }`
 )
+
+const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Bungalows', path: '/all' },
+    { name: 'Suite', path: '/suites' },
+]);
 ---
 
 <Layout
     title="Bungalows Suite"
     description="Bungalows Suite de Hotel Las Aldas: mayor espacio, kitchenette y vista al mar de Áncash. La opción ideal para una escapada romántica o familiar frente a la playa."
+    schema={breadcrumbSchema}
 >
     <div class="relative z-40 ">
         <div class="container flex items-start justify-center flex-col h-[20]">
             <div class="z-40 max-w-175 mx-auto">
-                <h2 class="mt-8 text-600 font-700 leading-[1.2] md:text-800">Bungalows Suite</h2>
+                <h1 class="mt-8 text-600 font-700 leading-[1.2] md:text-800">Bungalows Suite</h1>
             </div>
         </div>
     </div>

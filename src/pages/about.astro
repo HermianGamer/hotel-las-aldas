@@ -1,10 +1,19 @@
 ---
+export const prerender = true;
+
 import Layout from "@/layouts/Layout.astro";
+import { buildBreadcrumbSchema } from "@/lib/seo";
+
+const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Sobre Nosotros', path: '/about' },
+]);
 ---
 
 <Layout
     title="Sobre Nosotros"
     description="Hotel Las Aldas es un hotel familiar frente al mar de Casma, Áncash, Perú, con más de 40 años de historia y una ética sostenible que respeta el entorno costero y la comunidad."
+    schema={breadcrumbSchema}
 >
     <div class="container pt-15">
         <div class="mb-8 text-center">

@@ -1,5 +1,8 @@
 ---
+export const prerender = true;
+
 import Layout from "@/layouts/Layout.astro";
+import { buildBreadcrumbSchema } from "@/lib/seo";
 
 const faqs = [
     {
@@ -55,12 +58,17 @@ const faqSchema = {
         },
     })),
 };
+
+const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Inicio', path: '/' },
+    { name: 'Preguntas Frecuentes', path: '/faq' },
+]);
 ---
 
 <Layout
     title="Preguntas Frecuentes"
     description="Resuelve tus dudas sobre check-in, reservas, cancelaciones y ubicación de Hotel Las Aldas, hotel frente al mar en Casma, Áncash, Perú."
-    schema={faqSchema}
+    schema={[faqSchema, breadcrumbSchema]}
 >
     <div class="container pt-15 pb-20">
         <div class="mb-8 text-center">

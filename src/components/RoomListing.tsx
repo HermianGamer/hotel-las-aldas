@@ -25,7 +25,7 @@ const RoomListing = ({room}:{room: Room}) => {
             .map(w => `${urlForImage(room.image).width(w).quality(75).auto('format').url()} ${w}w`)
             .join(', ')}
           sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-          alt={room.name}
+          alt={`Bungalow ${room.name} frente al mar en Hotel Las Aldas, Áncash`}
           loading="lazy"
           decoding="async"
           className="max-h-full max-w-full transition-all duration-300 ease-in-out

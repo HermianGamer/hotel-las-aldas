@@ -7,6 +7,7 @@ import { TbGrill } from "react-icons/tb";
 import { MdOutlineCountertops } from "react-icons/md";
 import Reservation from "@/components/Reservation";
 import { urlFor } from "@/lib/sanityImageUrl"; // ajusta si tu helper tiene otro path
+import { buildBreadcrumbSchema, buildHotelRoomSchema } from "@/lib/seo";
 
 const { slug } = Astro.params;
 
@@ -37,6 +38,27 @@ const room = await sanityClient.fetch<Room>(
 if (!room) {
     return Astro.redirect('/404');
 }
+
+const roomImage = room.imageInterior
+    ? urlFor(room.imageInterior).width(1200).height(630).fit('crop').quality(75).auto('format').url()
+    : undefined;
+
+const roomSchema = [
+    buildBreadcrumbSchema([
+        { name: 'Inicio', path: '/' },
+        { name: 'Bungalows', path: '/all' },
+        { name: room.name ?? '', path: `/room/${room.slug}` },
+    ]),
+    buildHotelRoomSchema({
+        name: room.name ?? '',
+        slug: room.slug ?? '',
+        description: room.description,
+        capacity: room.capacity,
+        price: room.price,
+        image: roomImage,
+        amenities: room.amenities?.map((a: any) => ({ name: a.name })),
+    }),
+];
 ---
 
 <Layout
@@ -44,7 +66,8 @@ if (!room) {
     description={room.description
         ? `${room.description.slice(0, 145)}${room.description.length > 145 ? '…' : ''} Reserva el bungalow ${room.name} en Hotel Las Aldas, frente al mar en Áncash, Perú.`
         : `Conoce el bungalow ${room.name} de Hotel Las Aldas, frente al mar en Casma, Áncash, Perú.`}
-    image={room.imageInterior ? urlFor(room.imageInterior).width(1200).height(630).fit('crop').quality(75).auto('format').url() : undefined}
+    image={roomImage}
+    schema={roomSchema}
 >
     <div class="container pt-15">
         <div class="mb-8 text-center">
