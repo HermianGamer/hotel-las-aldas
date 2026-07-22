@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /bookings
+Disallow: /api/
+
+Sitemap: https://lasaldas.com/sitemap.xml

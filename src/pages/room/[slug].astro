@@ -39,7 +39,13 @@ if (!room) {
 }
 ---
 
-<Layout title={room.name}>
+<Layout
+    title={`Bungalow ${room.name}`}
+    description={room.description
+        ? `${room.description.slice(0, 145)}${room.description.length > 145 ? '…' : ''} Reserva el bungalow ${room.name} en Hotel Las Aldas, frente al mar en Áncash, Perú.`
+        : `Conoce el bungalow ${room.name} de Hotel Las Aldas, frente al mar en Casma, Áncash, Perú.`}
+    image={room.imageInterior ? urlFor(room.imageInterior).width(1200).height(630).fit('crop').quality(75).auto('format').url() : undefined}
+>
     <div class="container pt-15">
         <div class="mb-8 text-center">
             <h1 class="text-800 font-600 font-playwrite text-primary mb-8">{room.name}</h1>
