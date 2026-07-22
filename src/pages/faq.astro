@@ -1,0 +1,88 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const faqs = [
+    {
+        question: "¿Dónde está ubicado Hotel Las Aldas?",
+        answer:
+            'Hotel Las Aldas está ubicado en el Km. 347 de la Panamericana Norte, caleta La Gramita, distrito y provincia de Casma, región Áncash, Perú, frente al mar y junto al restaurante "La Balsa".',
+    },
+    {
+        question: "¿Cuál es el horario de check-in y check-out?",
+        answer:
+            "El check-in es a partir de las 14:00 horas y el check-out hasta las 12:00 horas. Los horarios pueden coordinarse con anticipación escribiéndonos por WhatsApp; el ingreso anticipado o la salida tardía dependen de disponibilidad.",
+    },
+    {
+        question: "¿Los bungalows tienen cocina propia?",
+        answer:
+            "Varios de nuestros bungalows cuentan con kitchenette y parrilla propia, ideales para quienes prefieren cocinar durante su estadía. Las amenidades varían según el bungalow.",
+    },
+    {
+        question: "¿Cómo puedo reservar?",
+        answer:
+            "Puedes reservar directamente desde nuestro sitio web, por teléfono, por correo electrónico o a través de plataformas de reservas externas. La reserva queda confirmada únicamente cuando el hotel envía una confirmación formal.",
+    },
+    {
+        question: "¿Cuál es la política de cancelación?",
+        answer:
+            "Las cancelaciones con más de 72 horas de anticipación a la fecha de ingreso reciben reembolso total. Las cancelaciones con menos de 72 horas de anticipación pueden estar sujetas a una penalidad equivalente a una noche de alojamiento.",
+    },
+    {
+        question: "¿Qué pasa si no me presento en la fecha de mi reserva?",
+        answer:
+            "En caso de no presentarse sin cancelación previa (no-show), el hotel podrá aplicar el cargo correspondiente a la primera noche de alojamiento.",
+    },
+    {
+        question: "¿Qué lugares turísticos hay cerca del hotel?",
+        answer:
+            "A pocos metros se encuentra el complejo arqueológico Las Aldas; a poca distancia, el observatorio solar de Chankillo (Patrimonio de la Humanidad UNESCO); y a 20 minutos, la Ruta El Huaro, con una playa prácticamente virgen y avistamiento de lobos marinos.",
+    },
+    {
+        question: "¿Cómo contacto al hotel?",
+        answer: "Puedes escribirnos directamente por WhatsApp al +51 923 381 810.",
+    },
+];
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+        },
+    })),
+};
+---
+
+<Layout
+    title="Preguntas Frecuentes"
+    description="Resuelve tus dudas sobre check-in, reservas, cancelaciones y ubicación de Hotel Las Aldas, hotel frente al mar en Casma, Áncash, Perú."
+    schema={faqSchema}
+>
+    <div class="container pt-15 pb-20">
+        <div class="mb-8 text-center">
+            <h1 class="text-400 font-600 mb-4">Preguntas Frecuentes</h1>
+        </div>
+
+        <div class="mt-16 max-w-3xl mx-auto space-y-8">
+            {faqs.map((faq) => (
+                <div>
+                    <h2 class="text-200 font-600 mb-2">{faq.question}</h2>
+                    <p class="text-muted-foreground">{faq.answer}</p>
+                </div>
+            ))}
+        </div>
+
+        <div class="mt-16 text-center">
+            <p>
+                ¿Tienes otra pregunta? Escríbenos por
+                <a href="https://wa.me/51923381810" target="_blank" class="underline underline-offset-2 hover:text-primary">WhatsApp</a>
+                o revisa nuestros <a href="/terms" class="underline underline-offset-2 hover:text-primary">términos y condiciones</a>
+                y nuestra <a href="/policies" class="underline underline-offset-2 hover:text-primary">política de cambios y devoluciones</a>.
+            </p>
+        </div>
+    </div>
+</Layout>

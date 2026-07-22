@@ -1,0 +1,97 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AmenitiesCard from "@/components/AmenitiesCard.astro";
+import chankilloThumb from "@/assets/thumbnails/chankillo-thumb.jpg";
+import huaroThumb from "@/assets/thumbnails/huaro-thumb.jpg";
+import aldasThumb from "@/assets/thumbnails/aldas-thumb.jpg";
+---
+
+<Layout
+    title="Playas y Destinos en Áncash"
+    description="Descubre las playas y destinos turísticos cerca de Hotel Las Aldas: la playa virgen de la Ruta El Huaro, el complejo arqueológico Las Aldas y el observatorio solar de Chankillo, en Casma, Áncash, Perú."
+>
+    <div class="container pt-15">
+        <div class="mb-8 text-center">
+            <h1 class="text-400 font-600 mb-4">Playas y Destinos en Áncash</h1>
+            <p class="text-muted-foreground max-w-2xl mx-auto">
+                Hotel Las Aldas es el punto de partida ideal para conocer la costa de Áncash: playas
+                poco concurridas, sitios arqueológicos frente al mar y naturaleza silvestre, todo a
+                pocos minutos de tu bungalow.
+            </p>
+        </div>
+
+        <div class="mt-16 max-w-4xl mx-auto space-y-12">
+            <div>
+                <h2 class="text-300 font-600 mb-4">Nuestra playa, frente al hotel</h2>
+                <p>
+                    Hotel Las Aldas se ubica directamente frente al mar, en la caleta La Gramita, Km.
+                    347 de la Panamericana Norte, Casma. Es un tramo de costa desértica del Pacífico
+                    peruano, alejado del bullicio de las playas más masificadas, donde el paisaje
+                    combina arena, acantilados y un mar abierto ideal para el descanso y la
+                    contemplación.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-300 font-600 mb-4">Ruta El Huaro: una playa prácticamente virgen</h2>
+                <p>
+                    A solo 20 minutos del hotel, la
+                    <a href="/experiences/huaro" class="underline underline-offset-2 hover:text-primary">Ruta El Huaro</a>
+                    cruza el desierto costero hasta una playa prácticamente virgen, con dunas y vista
+                    al mar. Es también uno de los mejores puntos de la zona para el avistamiento de
+                    lobos marinos en su hábitat natural.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-300 font-600 mb-4">Complejo arqueológico Las Aldas</h2>
+                <p>
+                    A pocos metros del hotel se encuentra el
+                    <a href="/experiences/aldas" class="underline underline-offset-2 hover:text-primary">complejo arqueológico Las Aldas</a>,
+                    un centro ceremonial construido sobre una ladera rocosa frente al mar, con más de
+                    120 hectáreas y estudiado por arqueólogos peruanos, japoneses y norteamericanos
+                    desde 1955.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-300 font-600 mb-4">Observatorio solar de Chankillo</h2>
+                <p>
+                    A poca distancia también se encuentra
+                    <a href="/experiences/chankillo" class="underline underline-offset-2 hover:text-primary">Chankillo</a>,
+                    declarado Patrimonio de la Humanidad por la UNESCO: el observatorio solar más
+                    antiguo de América, con sus Trece Torres alineadas para seguir el movimiento anual
+                    del sol.
+                </p>
+            </div>
+
+            <div>
+                <h2 class="text-300 font-600 mb-4">Gastronomía local</h2>
+                <p>
+                    La cocina de la costa de Áncash gira en torno al mar: cebiche, pescados frescos y
+                    mariscos son parte de la experiencia en Casma. Nuestros bungalows cuentan con
+                    kitchenette y parrilla propia para quienes prefieren cocinar con el pescado del
+                    día, y el restaurante "La Balsa", junto al acceso del hotel, es una referencia de
+                    cocina marina local.
+                </p>
+            </div>
+
+            <div class="text-center">
+                <h2 class="text-300 font-600 mb-4">Elige dónde quedarte</h2>
+                <p class="mb-6">
+                    Reserva un <a href="/all" class="underline underline-offset-2 hover:text-primary">bungalow frente al mar</a>
+                    en Hotel Las Aldas y usa el hotel como base para recorrer estos destinos de Áncash.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-20 max-w-4xl mx-auto">
+            <h2 class="text-300 font-600 mb-6 text-center">Experiencias cerca del hotel</h2>
+            <div class="space-y-6 md:space-y-0 md:grid md:grid-cols-3 md:gap-8 items-center">
+                <AmenitiesCard name="Complejo Arqueológico Las Aldas" image={aldasThumb} url='/experiences/aldas'/>
+                <AmenitiesCard name="Observatorio Solar de Chankillo" image={chankilloThumb} url='/experiences/chankillo'/>
+                <AmenitiesCard name="Ruta El Huaro y Lobos Marinos" image={huaroThumb} url='/experiences/huaro'/>
+            </div>
+        </div>
+    </div>
+</Layout>

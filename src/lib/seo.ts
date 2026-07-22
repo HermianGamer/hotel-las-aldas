@@ -62,7 +62,8 @@ export function buildHotelSchema() {
 		amenityFeature: [
 			{ '@type': 'LocationFeatureSpecification', name: 'Frente al mar', value: true },
 			{ '@type': 'LocationFeatureSpecification', name: 'Bungalows independientes', value: true },
-			{ '@type': 'LocationFeatureSpecification', name: 'Restaurante', value: true },
+			{ '@type': 'LocationFeatureSpecification', name: 'Kitchenette', value: true },
+			{ '@type': 'LocationFeatureSpecification', name: 'Parrilla', value: true },
 		],
 	};
 }

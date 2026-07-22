@@ -50,6 +50,7 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
                     <ul className="flex items-center">
                         <li className="mr-2 md:mr-4"><a href="/all">Bungalows</a></li>
                         <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="/#experiences">Experiencias</a></li>
+                        <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="/destinos">Destinos</a></li>
                         <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
                         <li className="inline-flex items-center"><Login /></li>
                         <SignedIn>
@@ -66,6 +67,7 @@ const Header = ({ isHomePage = false }: HeaderProps) => {
                         <li className="mr-2 md:mr-4"><a href="/">Inicio</a></li>
                         <li className="md:inline-block md:mr-4 mr-2 align-middle"><a href="/all">Bungalows</a></li>
                         <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="/#experiences">Experiencias</a></li>
+                        <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="/destinos">Destinos</a></li>
                         <li className="hidden md:inline-block md:mr-4 mr-2 align-middle"><a href="https://wa.me/51923381810" target="_blank">Contacto</a></li>
                         <li className="inline-flex items-center"><Login /></li>
                         <SignedIn>

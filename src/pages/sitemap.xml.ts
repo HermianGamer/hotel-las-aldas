@@ -10,6 +10,8 @@ const STATIC_ROUTES: { path: string; changefreq: string; priority: string }[] = 
 	{ path: '/suites', changefreq: 'weekly', priority: '0.8' },
 	{ path: '/standard', changefreq: 'weekly', priority: '0.8' },
 	{ path: '/about', changefreq: 'monthly', priority: '0.7' },
+	{ path: '/destinos', changefreq: 'monthly', priority: '0.8' },
+	{ path: '/faq', changefreq: 'monthly', priority: '0.6' },
 	{ path: '/experiences/aldas', changefreq: 'monthly', priority: '0.7' },
 	{ path: '/experiences/chankillo', changefreq: 'monthly', priority: '0.7' },
 	{ path: '/experiences/huaro', changefreq: 'monthly', priority: '0.7' },
