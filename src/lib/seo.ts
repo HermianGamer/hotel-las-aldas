@@ -19,6 +19,13 @@ export const BUSINESS = {
 	googleMapsUrl: 'https://maps.app.goo.gl/qD5mpfQqtWZSL2Kq5',
 };
 
+export const FOUNDER = {
+	name: 'Dante Scarpati Carbone',
+	birthDate: '1934-07-22',
+	deathDate: '2024-03-29',
+	birthPlace: 'Puerto Etén, Chiclayo, Perú',
+};
+
 export const SOCIAL_LINKS = [
 	'https://www.instagram.com/hotel_las_aldas/',
 	'https://www.facebook.com/HotelLasAldas/',
@@ -55,6 +62,13 @@ export function buildHotelSchema() {
 		},
 		hasMap: BUSINESS.googleMapsUrl,
 		sameAs: SOCIAL_LINKS,
+		founder: {
+			'@type': 'Person',
+			name: FOUNDER.name,
+			birthDate: FOUNDER.birthDate,
+			deathDate: FOUNDER.deathDate,
+			birthPlace: FOUNDER.birthPlace,
+		},
 		areaServed: {
 			'@type': 'AdministrativeArea',
 			name: 'Áncash, Perú',
